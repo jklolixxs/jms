@@ -2,7 +2,6 @@
 
 while true; do
 clear
-
 echo JMS一键脚本
 echo 支持Ubuntu / Debian / Centos系统
 echo "------------------------"
@@ -17,7 +16,7 @@ echo "7. 一些常用脚本 ▶"
 echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
-echo "99. 如何添加快捷方式与删除"
+echo "99. 添加快捷方式与如何删除快捷方式"
 echo "------------------------"
 read -p "请输入你的选择: " choice
 
@@ -1120,13 +1119,21 @@ case $choice in
 
   99)
     clear
-    echo "------------------------"
-    echo "添加快捷方式："
-    echo ""
-    echo "echo "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" >> ~/.bashrc && source ~/.bashrc"
-    echo ""
-    echo "添加后使用 jms 即可直接唤醒脚本"
-    echo ""
+
+    shortcut_added=false
+    # Check if the alias is already added in .bashrc
+    if ! grep -q "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" ~/.bashrc; then
+        echo "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" >> ~/.bashrc
+        shortcut_added=true
+    fi
+
+    # If shortcut was added, then source .bashrc
+    if [ "$shortcut_added" = true ]; then
+        source ~/.bashrc
+
+    fi
+    echo "快捷方式添加成功"
+    echo "输入 jms 即可唤醒脚本"
     echo "------------------------"
     echo "删除快捷方式："
     echo ""

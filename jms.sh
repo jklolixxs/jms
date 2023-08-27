@@ -3,21 +3,8 @@
 while true; do
 clear
 
-
-shortcut_added=false
-
-if ! grep -q "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" ~/.bashrc; then
-    echo "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" >> ~/.bashrc
-    shortcut_added=true
-fi
-
-if [ "$shortcut_added" = true ]; then
-    source ~/.bashrc
-fi
-
 echo JMS一键脚本
 echo 支持Ubuntu / Debian / Centos系统
-echo 输入 jms 即可快速打开脚本
 echo "------------------------"
 echo "1. 系统信息查询"
 echo "2. 系统更新"
@@ -27,11 +14,9 @@ echo "5. Docker管理器 ▶"
 echo "------------------------"
 echo "6. Sing-Box相关 ▶"
 echo "------------------------"
-echo "00. 关于脚本"
-echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
-echo "99. 删除快捷方式"
+echo "99. 如何添加快捷方式与删除"
 echo "------------------------"
 read -p "请输入你的选择: " choice
 
@@ -960,29 +945,26 @@ case $choice in
 
     ;;
 
-  00)
-    clear
-    echo "关于脚本"
-    echo  "------------------------"
-    echo "参考科技lion的一键脚本制作而成"
-    echo  "------------------------"
-    ;;
-
   99)
     clear
-    alias_to_remove="alias jms='wget -P /root -N --no-check-certificate \"https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh\" && chmod 700 /root/jms.sh && /root/jms.sh Bash'"
-
-    # Check if the alias exists in .bashrc
-    if grep -q "$alias_to_remove" ~/.bashrc; then
-        # Remove the alias
-        sed -i "/$alias_to_remove/d" ~/.bashrc
-    fi
-
-    # Source .bashrc to apply changes
-    source ~/.bashrc
-
-    echo "快捷方式删除成功"
-    echo "如需卸载脚本，请自行运行 rm -f /root/jms.sh"
+    echo "------------------------"
+    echo "添加快捷方式："
+    echo ""
+    echo "echo "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" >> ~/.bashrc && source ~/.bashrc"
+    echo ""
+    echo "添加后使用 jms 即可直接唤醒脚本"
+    echo ""
+    echo "------------------------"
+    echo "删除快捷方式："
+    echo ""
+    echo "sed -i '/alias jms=.*Bash/d' .bashrc"
+    echo ""
+    echo "------------------------"
+    echo "如需卸载脚本，请自行运行:"
+    echo ""
+    echo "rm -f /root/jms.sh"
+    echo ""
+    echo "------------------------"
     ;;
 
   0)

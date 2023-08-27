@@ -3,6 +3,18 @@
 while true; do
 clear
 
+
+shortcut_added=false
+
+if ! grep -q "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" ~/.bashrc; then
+    echo "alias jms='wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh Bash'" >> ~/.bashrc
+    shortcut_added=true
+fi
+
+if [ "$shortcut_added" = true ]; then
+    source ~/.bashrc
+fi
+
 echo JMS一键脚本
 echo 支持Ubuntu / Debian / Centos系统
 echo "------------------------"

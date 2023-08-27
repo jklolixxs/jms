@@ -9,10 +9,11 @@ echo "------------------------"
 echo "1. 系统信息查询"
 echo "2. 系统更新"
 echo "3. 系统清理"
-echo "4. 常用工具安装 ▶"
-echo "5. Docker管理器 ▶"
 echo "------------------------"
+echo "4. 常用工具安装 ▶"
+echo "5. Docker管理 ▶"
 echo "6. Sing-Box相关 ▶"
+echo "7. 一些常用脚本 ▶"
 echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
@@ -926,6 +927,178 @@ case $choice in
         done
 
           ;;
+
+          0)
+              /root/jms.sh
+              exit
+              ;;
+
+          *)
+              echo "无效的输入!"
+              ;;
+      esac
+      echo -e "\033[0;32m操作完成\033[0m"
+      echo "按任意键继续..."
+      read -n 1 -s -r -p ""
+      echo ""
+      clear
+  done
+
+    ;;
+
+  7)
+  while true; do
+      clear
+      echo "系统相关脚本"
+      echo "1. 开启BBR+关闭ECN+优化+升级一键脚本"
+      echo "2. DD脚本"
+      echo "3. WARP一键脚本"
+      echo "------------------------"
+      echo "测试相关脚本"
+      echo "4. VPS启动耗时"
+      echo "5. 硬盘测试"
+      echo "6. 流媒体检测"
+      echo "7. 三网回程测试TCP"
+      echo "8. 三网回程测试ICMP"
+      echo "9. 三网回程测试TCP/ICMP"
+      echo "10. 三网测速"
+      echo "11. LemonBench 一键测试脚本 ▶"
+      echo "------------------------"
+      echo "翻墙脚本"
+      echo "12. X-UI"
+      echo "13. 3X-UI"
+      echo "14. xray8合1一键部署脚本"
+      echo "15. Hysteria一键脚本"
+      echo "------------------------"
+      echo "0. 返回主菜单"
+      echo "------------------------"
+      read -p "请输入你的选择: " sub_choice
+
+      case $sub_choice in
+          1)
+              clear
+              wget -O tcpx.sh "https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh" && chmod +x tcpx.sh && ./tcpx.sh
+              ;;
+
+          2)
+              clear
+              wget --no-check-certificate -O NewReinstall.sh https://git.io/newbetags && chmod a+x NewReinstall.sh && bash NewReinstall.sh
+              ;;
+
+          3)
+              clear
+              wget -N https://raw.githubusercontent.com/fscarmen/warp/main/menu.sh && bash menu.sh [option]
+              ;;
+
+          4)
+              clear
+              systemd-analyze
+              ;;
+
+          5)
+              clear
+              echo "耗时较长，请耐心等待 (数值越高越好)"
+              dd bs=64k count=4k if=/dev/zero of=test oflag=dsync
+              ;;
+
+          6)
+              clear
+              bash <(curl -L -s check.unlock.media)
+              ;;
+
+          7)
+              clear
+              curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash
+              ;;
+
+          8)
+              clear
+              curl https://raw.githubusercontent.com/zhanghanyun/backtrace/main/install.sh -sSf | sh
+              ;;
+
+          9)
+              clear
+              wget https://raw.githubusercontent.com/vpsxb/testrace/main/testrace.sh -O testrace.sh && bash testrace.sh
+              ;;
+
+          10)
+              clear
+              bash <(curl -Lso- https://git.io/superspeed_uxh)
+              ;;
+
+          11)
+            while true; do
+            clear
+            echo "LemonBench 一键测试脚本"
+            echo "------------------------"
+            echo "1. 稳定版 - wget"
+            echo "2. 稳定版 - curl"
+            echo "3. 测试版 - wget (可及时体验新功能)"
+            echo "4. 测试版 - curl (可及时体验新功能)"
+            echo "------------------------"
+            echo "0. 返回主菜单"
+            echo "------------------------"
+            read -p "请输入你的选择: " sub_choice
+
+            case $sub_choice in
+                1)
+                    clear
+                    wget -O- https://ilemonra.in/LemonBench | bash -s -- --fast
+                    ;;
+
+                2)
+                    clear
+                    curl -fsL https://ilemonra.in/LemonBench | bash -s -- --fast
+                    ;;
+
+                3)
+                    clear
+                    wget -O- https://ilemonra.in/LemonBench-Beta | bash -s -- --fast
+                    ;;
+
+                4)
+                    clear
+                    curl -fsL https://ilemonra.in/LemonBench-Beta | bash -s -- --fast
+                    ;;
+
+                0)
+                    /root/jms.sh
+                    exit
+                    ;;
+
+                *)
+                    echo "无效的输入!"
+                    ;;
+
+            esac
+            echo -e "\033[0;32m操作完成\033[0m"
+            echo "按任意键继续..."
+            read -n 1 -s -r -p ""
+            echo ""
+            clear
+        done
+
+          ;;
+
+          12)
+              clear
+              bash <(curl -Ls https://raw.githubusercontent.com/FranzKafkaYu/x-ui/master/install.sh)
+              ;;
+
+          13)
+              clear
+              bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+              ;;
+
+          14)
+              clear
+              wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
+              ;;
+
+          15)
+              clear
+              bash <(curl -fsSL https://git.io/hysteria.sh)
+              ;;
 
           0)
               /root/jms.sh

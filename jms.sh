@@ -755,12 +755,12 @@ case $choice in
       case $sub_choice in
           1)
               clear
-              wget -O /root/tcpx.sh "https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh" && chmod +x /root/tcpx.sh && /root/tcpx.sh
+              wget -O tcpx.sh "https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh" && chmod +x tcpx.sh && ./tcpx.sh
               ;;
 
           2)
               clear
-              wget --no-check-certificate -O /root/NewReinstall.sh https://git.io/newbetags && chmod a+x /root/NewReinstall.sh && bash /root/NewReinstall.sh
+              wget --no-check-certificate -O NewReinstall.sh https://git.io/newbetags && chmod a+x NewReinstall.sh && bash NewReinstall.sh
               ;;
 
           3)
@@ -845,10 +845,10 @@ case $choice in
             clear
             echo "LemonBench 一键测试脚本"
             echo "------------------------"
-            echo "1. 稳定版 - wget"
-            echo "2. 稳定版 - curl"
-            echo "3. 测试版 - wget (可及时体验新功能)"
-            echo "4. 测试版 - curl (可及时体验新功能)"
+            echo "1. 稳定版 - wget获取"
+            echo "2. 稳定版 - curl获取"
+            echo "3. 测试版 - wget获取 (可及时体验新功能)"
+            echo "4. 测试版 - curl获取 (可及时体验新功能)"
             echo "------------------------"
             echo "0. 返回主菜单"
             echo "------------------------"

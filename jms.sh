@@ -1,11 +1,19 @@
 #!/bin/bash
 
+# 检查当前用户是否为 root 用户
+if [ "$EUID" -ne 0 ]; then
+  echo "请使用 root 用户身份运行此脚本"
+  exit
+fi
+
 while true; do
 clear
-echo JMS一键脚本
-echo 支持Ubuntu / Debian / Centos系统
-echo 输入 jms 即可唤醒脚本
-echo "------------------------"
+echo =================================================
+echo 系统支持: 支持Ubuntu / Debian / Centos系统
+echo 版本: 3.5.1
+echo 作者: jms
+echo 反馈:  https://github.com/jklolixxs/jms/issues
+echo =================================================
 echo "1. 系统信息查询"
 echo "2. 系统更新"
 echo "3. 系统清理"
@@ -17,17 +25,10 @@ echo "7. 一些常用脚本 ▶"
 echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
-echo "11. 更新脚本"
+echo "11. 添加快捷指令"
+echo "22. 更新脚本"
 echo "99. 删除脚本"
 echo "------------------------"
-shortcut_added=false
-if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
-    echo "alias jms='/root/jms.sh'" >> ~/.bashrc
-    shortcut_added=true
-fi
-if [ "$shortcut_added" = true ]; then
-    source ~/.bashrc
-fi
 read -p "请输入你的选择: " choice
 
 case $choice in
@@ -1238,6 +1239,24 @@ case $choice in
 
   11)
     clear
+    shortcut_added=false
+        if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
+            echo "alias jms='/root/jms.sh'" >> ~/.bashrc
+            shortcut_added=true
+        fi
+        if [ "$shortcut_added" = true ]; then
+            source ~/.bashrc
+        fi
+    echo "------------------------"
+    echo "添加成功"
+    echo "请重启或手动输入指令同步缓存："
+    echo "------------------------"
+    echo "source ~/.bashrc"
+    echo "------------------------"
+    ;;
+
+  22)
+    clear
     rm -f /root/jms.sh
     wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh
     echo "------------------------"
@@ -1254,7 +1273,6 @@ case $choice in
     rm -f /root/jms.sh
     echo "------------------------"
     echo "脚本删除成功"
-    echo "可以选择重启，清理快捷指令缓存"
     echo "------------------------"
     exit
     ;;

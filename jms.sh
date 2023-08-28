@@ -4,6 +4,7 @@ while true; do
 clear
 echo JMS一键脚本
 echo 支持Ubuntu / Debian / Centos系统
+echo 输入 jms 即可唤醒脚本
 echo "------------------------"
 echo "1. 系统信息查询"
 echo "2. 系统更新"
@@ -14,12 +15,19 @@ echo "5. Docker管理 ▶"
 echo "------------------------"
 echo "7. 一些常用脚本 ▶"
 echo "------------------------"
-echo "00. 更新脚本"
-echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
-echo "99. 添加快捷方式与如何删除快捷方式"
+echo "11. 更新脚本"
+echo "99. 删除脚本"
 echo "------------------------"
+shortcut_added=false
+if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
+    echo "alias jms='/root/jms.sh'" >> ~/.bashrc
+    shortcut_added=true
+fi
+if [ "$shortcut_added" = true ]; then
+    source ~/.bashrc
+fi
 read -p "请输入你的选择: " choice
 
 case $choice in
@@ -1228,40 +1236,26 @@ case $choice in
 
     ;;
 
-  99)
-    clear
-
-    shortcut_added=false
-    if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
-        echo "alias jms='/root/jms.sh'" >> ~/.bashrc
-        shortcut_added=true
-    fi
-
-    if [ "$shortcut_added" = true ]; then
-        source ~/.bashrc
-    fi
-
-    echo "快捷方式添加成功"
-    echo "输入 jms 即可唤醒脚本"
-    echo "------------------------"
-    echo "删除快捷方式(如果输入jms仍然会唤起脚本，则需)："
-    echo ""
-    echo "sed -i '/alias jms=.*jms.sh/d' .bashrc && source ~/.bashrc && reboot"
-    echo ""
-    echo "------------------------"
-    echo "如需卸载脚本，请自行运行:"
-    echo ""
-    echo "rm -f /root/jms.sh"
-    echo ""
-    echo "------------------------"
-    ;;
-
-  00)
+  11)
     clear
     rm -f /root/jms.sh
-    wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh
+    wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh
+    echo "------------------------"
     echo "脚本更新完毕"
+    echo "------------------------"
     /root/jms.sh
+    exit
+    ;;
+
+  99)
+    clear
+    sed -i '/alias jms=.*jms.sh/d' .bashrc
+    source ~/.bashrc
+    rm -f /root/jms.sh
+    echo "------------------------"
+    echo "脚本删除成功"
+    echo "可以选择重启，清理快捷指令缓存"
+    echo "------------------------"
     exit
     ;;
 

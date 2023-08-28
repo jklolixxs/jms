@@ -1256,10 +1256,10 @@ case $choice in
 
   22)
     clear
-    rm -f /root/jms.sh
     echo "------------------------"
     echo "开始更新脚本"
     echo "------------------------"
+    rm -f /root/jms.sh
     wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh
     clear
     echo "------------------------"

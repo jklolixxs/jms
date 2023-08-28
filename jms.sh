@@ -926,6 +926,8 @@ case $choice in
                   echo "5. 安装go"
                   echo "6. 编译Sing-box全flags内核 ▶"
                   echo "------------------------"
+                  echo "99. 目前已知问题的解决方案 ▶"
+                  echo "------------------------"
                   echo "0. 返回主菜单"
                   echo "------------------------"
                   read -p "请输入你的选择: " sub_choice
@@ -1087,21 +1089,30 @@ case $choice in
                             3)
                                 clear
                                 # 提示用户输入内容
-                                echo "输入例子 v1.4.0-rc.3 或 v1.4.0-beta.1 或 v1.3.6"
+                                echo "获取最新版本号中..."
                                 REPO_URL="https://api.github.com/repos/SagerNet/sing-box/releases"
                                 LATEST_TAG=$(curl -s $REPO_URL | jq -r '.[0].tag_name')
+                                echo "获取成功"
+                                sleep 1
+                                clear
+                                echo "------------------------"
                                 echo "当前最新的版本为: $LATEST_TAG"
+                                echo "输入例子 v1.4.0-rc.3 或 v1.4.0-beta.1 或 v1.3.6"
+                                echo "------------------------"
                                 read -p "请输入要编译的版本号： " user_input
+                                clear
               
                                 # 构建完整的命令
                                 command="go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
               
                                 # 打印最终的命令
                                 echo "将要编译的版本是："
+                                echo "------------------------"
                                 echo "$user_input"
+                                echo "------------------------"
               
                                 # 确认是否执行命令
-                                read -p "是否要执行上述命令？(y/n) " execute
+                                read -p "是否开始编译？(y/n) " execute
                                 if [ "$execute" == "y" ]; then
                                     # 执行命令
                                     clear
@@ -1122,6 +1133,43 @@ case $choice in
                                 fi
                                 ;;
               
+                            0)
+                                /root/jms.sh
+                                exit
+                                ;;
+              
+                            *)
+                                echo "无效的输入!"
+                                ;;
+              
+                        esac
+                        echo -e "\033[0;32m操作完成\033[0m"
+                        echo "按任意键继续..."
+                        read -n 1 -s -r -p ""
+                        echo ""
+                        clear
+                    done
+              
+                      ;;
+
+                      99)
+                        while true; do
+                        clear
+                        echo "已知问题相关"
+                        echo "------------------------"
+                        echo "1. 如果SSH登录后显示-bash-x.x 选我"
+                        echo "------------------------"
+                        echo "0. 返回主菜单"
+                        echo "------------------------"
+                        read -p "请输入你的选择: " sub_choice
+              
+                        case $sub_choice in
+                            1)
+                                clear
+                                cp /etc/skel/.bash_logout /root && cp /etc/skel/.bashrc /root && cp /etc/skel/.profile /root
+                                echo "已修复，请断开SSH重新连接尝试"
+                                ;;
+
                             0)
                                 /root/jms.sh
                                 exit

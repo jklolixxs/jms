@@ -348,9 +348,9 @@ case $choice in
           31)
               clear
               if command -v apt &>/dev/null; then
-                  apt update -y && apt install -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch
+                  apt update -y && apt install -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
               elif command -v yum &>/dev/null; then
-                  yum -y update && yum -y install curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch
+                  yum -y update && yum -y install curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
               else
                   echo "未知的包管理器!"
               fi
@@ -726,7 +726,7 @@ case $choice in
           fi
       fi
       echo "系统相关脚本"
-      echo "1. 开启BBR+关闭ECN+优化+升级一键脚本"
+      echo "1. 优化合集一键脚本"
       echo "2. DD脚本"
       echo "3. WARP一键脚本"
       echo "4. 一键修改SSH登录端口"
@@ -755,12 +755,12 @@ case $choice in
       case $sub_choice in
           1)
               clear
-              wget -O tcpx.sh "https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh" && chmod +x tcpx.sh && ./tcpx.sh
+              wget -O /root/tcpx.sh "https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh" && chmod +x /root/tcpx.sh && /root/tcpx.sh
               ;;
 
           2)
               clear
-              wget --no-check-certificate -O NewReinstall.sh https://git.io/newbetags && chmod a+x NewReinstall.sh && bash NewReinstall.sh
+              wget --no-check-certificate -O /root/NewReinstall.sh https://git.io/newbetags && chmod a+x /root/NewReinstall.sh && bash /root/NewReinstall.sh
               ;;
 
           3)
@@ -812,6 +812,7 @@ case $choice in
               clear
               echo "耗时较长，请耐心等待 (数值越高越好)"
               dd bs=64k count=4k if=/dev/zero of=test oflag=dsync
+			  rm -f /root/test
               ;;
 
           33)

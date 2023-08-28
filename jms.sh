@@ -140,7 +140,6 @@ case $choice in
     if [ -f "/etc/redhat-release" ]; then
         yum -y update
     fi
-
     ;;
 
   3)
@@ -187,6 +186,7 @@ case $choice in
       echo "13. unzip ZIP压缩解压工具z"
       echo "14. tar GZ压缩解压工具"
       echo "15. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
+      echo "16. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
       echo "------------------------"
       echo "31. 全部安装"
       echo "32. 全部卸载"
@@ -705,6 +705,26 @@ case $choice in
   7)
   while true; do
       clear
+      # Update system on Debian-based systems
+      if [ -f "/etc/debian_version" ]; then
+          if ! command -v jq &>/dev/null; then
+              echo "------------------------"
+              echo "首次打开会检测是否安装必备应用jq，如果未安装，则会安装，请耐心等待"
+              echo "------------------------"
+              DEBIAN_FRONTEND=noninteractive apt update -y > /dev/null 2>&1 && DEBIAN_FRONTEND=noninteractive apt install jq -y > /dev/null 2>&1
+              clear
+          fi
+      fi
+      # Update system on Red Hat-based systems
+      if [ -f "/etc/redhat-release" ]; then
+          if ! command -v jq &>/dev/null; then
+              echo "------------------------"
+              echo "首次打开会检测是否安装必备应用jq，如果未安装，则会安装，请耐心等待"
+              echo "------------------------"
+              yum -y update > /dev/null 2>&1 && yum install -y jq > /dev/null 2>&1
+              clear
+          fi
+      fi
       echo "系统相关脚本"
       echo "1. 开启BBR+关闭ECN+优化+升级一键脚本"
       echo "2. DD脚本"

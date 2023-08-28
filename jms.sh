@@ -10,7 +10,6 @@ while true; do
 clear
 echo =================================================
 echo 系统支持: 支持Ubuntu / Debian / Centos系统
-echo 版本: 3.5.1
 echo 作者: jms
 echo 反馈:  https://github.com/jklolixxs/jms/issues
 echo =================================================
@@ -1258,7 +1257,11 @@ case $choice in
   22)
     clear
     rm -f /root/jms.sh
+    echo "------------------------"
+    echo "开始更新脚本"
+    echo "------------------------"
     wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh
+    clear
     echo "------------------------"
     echo "脚本更新完毕"
     echo "------------------------"

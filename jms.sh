@@ -402,16 +402,16 @@ case $choice in
       echo "------------------------"
       echo "1. 安装更新Docker环境"
       echo "------------------------"
-      echo "2. 查看Dcoker全局状态"
+      echo "2. 查看Docker全局状态"
       echo "------------------------"
-      echo "3. Dcoker容器管理 ▶"
-      echo "4. Dcoker镜像管理 ▶"
-      echo "5. Dcoker网络管理 ▶"
-      echo "6. Dcoker卷管理 ▶"
+      echo "3. Docker容器管理 ▶"
+      echo "4. Docker镜像管理 ▶"
+      echo "5. Docker网络管理 ▶"
+      echo "6. Docker卷管理 ▶"
       echo "------------------------"
       echo "7. 清理无用的docker容器和镜像网络数据卷"
       echo "------------------------"
-      echo "8. 卸载Dcoker环境"
+      echo "8. 卸载Docker环境"
       echo "------------------------"
       echo "0. 返回主菜单"
       echo "------------------------"
@@ -426,20 +426,20 @@ case $choice in
               ;;
           2)
               clear
-              echo "Dcoker版本"
+              echo "Docker版本"
               docker --version
               docker-compose --version
               echo ""
-              echo "Dcoker镜像列表"
+              echo "Docker镜像列表"
               docker image ls
               echo ""
-              echo "Dcoker容器列表"
+              echo "Docker容器列表"
               docker ps -a
               echo ""
-              echo "Dcoker卷列表"
+              echo "Docker卷列表"
               docker volume ls
               echo ""
-              echo "Dcoker网络列表"
+              echo "Docker网络列表"
               docker network ls
               echo ""
               ;;

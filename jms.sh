@@ -11,7 +11,8 @@ echo "3. 系统清理"
 echo "------------------------"
 echo "4. 常用工具安装 ▶"
 echo "5. Docker管理 ▶"
-echo "6. Sing-Box相关 ▶"
+# echo "6. Sing-Box相关 ▶"
+echo "------------------------"
 echo "7. 一些常用脚本 ▶"
 echo "------------------------"
 echo "0. 退出脚本"
@@ -702,248 +703,248 @@ case $choice in
 
     ;;
 
-  6)
-  while true; do
-      clear
-      echo "Sing-Box相关"
-      echo "--------使用官方内核--------"
-      echo "1. 下载Sing-Box官方内核"
-      echo "2. 安装Sing-Box官方内核"
-      echo "3. 查看Sing-Box官方内核安装位置"
-      echo "4. 卸载Sing-Box官方内核"
-      echo "---------自行编译---------"
-      echo "5. 安装go"
-      echo "6. 编译Sing-box全flags内核 ▶"
-      echo "------------------------"
-      echo "0. 返回主菜单"
-      echo "------------------------"
-      read -p "请输入你的选择: " sub_choice
+#   6)
+#   while true; do
+#       clear
+#       echo "Sing-Box相关"
+#       echo "--------使用官方内核--------"
+#       echo "1. 下载Sing-Box官方内核"
+#       echo "2. 安装Sing-Box官方内核"
+#       echo "3. 查看Sing-Box官方内核安装位置"
+#       echo "4. 卸载Sing-Box官方内核"
+#       echo "---------自行编译---------"
+#       echo "5. 安装go"
+#       echo "6. 编译Sing-box全flags内核 ▶"
+#       echo "------------------------"
+#       echo "0. 返回主菜单"
+#       echo "------------------------"
+#       read -p "请输入你的选择: " sub_choice
 
-      case $sub_choice in
-          1)
-              clear
-              # 提示用户输入版本号
-              read -p "请输入版本号: " desired_version
+#       case $sub_choice in
+#           1)
+#               clear
+#               # 提示用户输入版本号
+#               read -p "请输入版本号: " desired_version
 
-              # 检查操作系统类型
-              if [[ -f /etc/os-release ]]; then
-                  source /etc/os-release
-                  if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
-                      file_extension="deb"
-                  elif [[ "$ID" == "centos" ]]; then
-                      file_extension="rpm"
-                  else
-                      echo "不支持的操作系统类型"
-                      exit 1
-                  fi
-              else
-                  echo "无法确定操作系统类型"
-                  exit 1
-              fi
+#               # 检查操作系统类型
+#               if [[ -f /etc/os-release ]]; then
+#                   source /etc/os-release
+#                   if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+#                       file_extension="deb"
+#                   elif [[ "$ID" == "centos" ]]; then
+#                       file_extension="rpm"
+#                   else
+#                       echo "不支持的操作系统类型"
+#                       exit 1
+#                   fi
+#               else
+#                   echo "无法确定操作系统类型"
+#                   exit 1
+#               fi
 
-              # 构建下载链接
-              download_link="https://github.com/SagerNet/sing-box/releases/download/v${desired_version}/sing-box_${desired_version}_linux_amd64.${file_extension}"
+#               # 构建下载链接
+#               download_link="https://github.com/SagerNet/sing-box/releases/download/v${desired_version}/sing-box_${desired_version}_linux_amd64.${file_extension}"
 
-              # 输出下载链接
-              echo "下载链接: $download_link"
+#               # 输出下载链接
+#               echo "下载链接: $download_link"
 
-              # 使用curl命令下载文件
-              curl -L -o sing-box.${file_extension} $download_link
+#               # 使用curl命令下载文件
+#               curl -L -o sing-box.${file_extension} $download_link
 
-              echo "文件下载完成！"
-              ;;
+#               echo "文件下载完成！"
+#               ;;
 
-          2)
-              clear
-              # 检查操作系统类型
-              if [[ -f /etc/os-release ]]; then
-                  source /etc/os-release
-                  if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
-                      sudo dpkg -i sing-box.deb
-                  elif [[ "$ID" == "centos" ]]; then
-                      sudo rpm -i sing-box.rpm
-                  else
-                      echo "不支持的操作系统类型"
-                      exit 1
-                  fi
-              else
-                  echo "无法确定操作系统类型"
-                  exit 1
-              fi
+#           2)
+#               clear
+#               # 检查操作系统类型
+#               if [[ -f /etc/os-release ]]; then
+#                   source /etc/os-release
+#                   if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+#                       sudo dpkg -i sing-box.deb
+#                   elif [[ "$ID" == "centos" ]]; then
+#                       sudo rpm -i sing-box.rpm
+#                   else
+#                       echo "不支持的操作系统类型"
+#                       exit 1
+#                   fi
+#               else
+#                   echo "无法确定操作系统类型"
+#                   exit 1
+#               fi
 
-              echo "软件安装完成！"
-              ;;
+#               echo "软件安装完成！"
+#               ;;
 
-          3)
-              clear
-              # 检查操作系统类型
-              if [[ -f /etc/os-release ]]; then
-                  source /etc/os-release
-                  if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
-                      echo "------------------------"
-                      sudo dpkg -c sing-box.deb
-                      echo "------------------------"
-                  elif [[ "$ID" == "centos" ]]; then
-                      echo "------------------------"
-                      sudo rpm -c sing-box.rpm
-                      echo "------------------------"
-                  else
-                      echo "不支持的操作系统类型"
-                      exit 1
-                  fi
-              else
-                  echo "无法确定操作系统类型"
-                  exit 1
-              fi
-              ;;
+#           3)
+#               clear
+#               # 检查操作系统类型
+#               if [[ -f /etc/os-release ]]; then
+#                   source /etc/os-release
+#                   if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+#                       echo "------------------------"
+#                       sudo dpkg -c sing-box.deb
+#                       echo "------------------------"
+#                   elif [[ "$ID" == "centos" ]]; then
+#                       echo "------------------------"
+#                       sudo rpm -c sing-box.rpm
+#                       echo "------------------------"
+#                   else
+#                       echo "不支持的操作系统类型"
+#                       exit 1
+#                   fi
+#               else
+#                   echo "无法确定操作系统类型"
+#                   exit 1
+#               fi
+#               ;;
 
-          4)
-              clear
-              # 检查操作系统类型
-              if [[ -f /etc/os-release ]]; then
-                  source /etc/os-release
-                  if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
-                      echo "------------------------"
-                      echo "开始卸载"
-                      rm -f /root/sing-box.deb
-                      rm -f /etc/systemd/system/sing-box.service
-                      rm -f /etc/systemd/system/sing-box@.service
-                      rm -f /usr/bin/sing-box
-                      rm -rf /etc/sing-box
-                      rm -rf /usr/share/licenses/
-                      sleep 1
-                      echo "------------------------"
-                      echo "卸载完成"
-                      echo "------------------------"
-                  elif [[ "$ID" == "centos" ]]; then
-                      echo "------------------------"
-                      echo "开始卸载"
-                      rm -f /root/sing-box.rpm
-                      rm -f /etc/systemd/system/sing-box.service
-                      rm -f /etc/systemd/system/sing-box@.service
-                      rm -f /usr/bin/sing-box
-                      rm -rf /etc/sing-box
-                      rm -rf /usr/share/licenses/
-                      sleep 1
-                      echo "------------------------"
-                      echo "卸载完成"
-                      echo "------------------------"
-                  else
-                      echo "不支持的操作系统类型"
-                      exit 1
-                  fi
-              else
-                  echo "无法确定操作系统类型"
-                  exit 1
-              fi
-              ;;
+#           4)
+#               clear
+#               # 检查操作系统类型
+#               if [[ -f /etc/os-release ]]; then
+#                   source /etc/os-release
+#                   if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+#                       echo "------------------------"
+#                       echo "开始卸载"
+#                       rm -f /root/sing-box.deb
+#                       rm -f /etc/systemd/system/sing-box.service
+#                       rm -f /etc/systemd/system/sing-box@.service
+#                       rm -f /usr/bin/sing-box
+#                       rm -rf /etc/sing-box
+#                       rm -rf /usr/share/licenses/
+#                       sleep 1
+#                       echo "------------------------"
+#                       echo "卸载完成"
+#                       echo "------------------------"
+#                   elif [[ "$ID" == "centos" ]]; then
+#                       echo "------------------------"
+#                       echo "开始卸载"
+#                       rm -f /root/sing-box.rpm
+#                       rm -f /etc/systemd/system/sing-box.service
+#                       rm -f /etc/systemd/system/sing-box@.service
+#                       rm -f /usr/bin/sing-box
+#                       rm -rf /etc/sing-box
+#                       rm -rf /usr/share/licenses/
+#                       sleep 1
+#                       echo "------------------------"
+#                       echo "卸载完成"
+#                       echo "------------------------"
+#                   else
+#                       echo "不支持的操作系统类型"
+#                       exit 1
+#                   fi
+#               else
+#                   echo "无法确定操作系统类型"
+#                   exit 1
+#               fi
+#               ;;
 
-          5)
-              clear
-              set -e -o pipefail
+#           5)
+#               clear
+#               set -e -o pipefail
 
-              go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
-              curl -Lo go.tar.gz "https://go.dev/dl/go$go_version.linux-amd64.tar.gz"
-              sudo rm -rf /usr/local/go
-              sudo tar -C /usr/local -xzf go.tar.gz
-              rm go.tar.gz
-              ;;
+#               go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
+#               curl -Lo go.tar.gz "https://go.dev/dl/go$go_version.linux-amd64.tar.gz"
+#               sudo rm -rf /usr/local/go
+#               sudo tar -C /usr/local -xzf go.tar.gz
+#               rm go.tar.gz
+#               ;;
 
-          6)
-            while true; do
-            clear
-            echo "Sing-Box相关"
-            echo "------------------------"
-            echo "1. 编译最新Latest版"
-            echo "2. 编译最新dev-next版"
-            echo "3. 编译指定版本"
-            echo "------------------------"
-            echo "0. 返回主菜单"
-            echo "------------------------"
-            read -p "请输入你的选择: " sub_choice
+#           6)
+#             while true; do
+#             clear
+#             echo "Sing-Box相关"
+#             echo "------------------------"
+#             echo "1. 编译最新Latest版"
+#             echo "2. 编译最新dev-next版"
+#             echo "3. 编译指定版本"
+#             echo "------------------------"
+#             echo "0. 返回主菜单"
+#             echo "------------------------"
+#             read -p "请输入你的选择: " sub_choice
 
-            case $sub_choice in
-                1)
-                    clear
-                    go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
-                    ;;
+#             case $sub_choice in
+#                 1)
+#                     clear
+#                     go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
+#                     ;;
 
-                2)
-                    clear
-                    go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
-                    ;;
+#                 2)
+#                     clear
+#                     go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
+#                     ;;
 
-                3)
-                    clear
-                    # 提示用户输入内容
-                    echo "输入例子 v1.4.0-rc.3 或 v1.4.0-beta.1 或 v1.3.6"
-                    read -p "请输入要编译的版本号： " user_input
+#                 3)
+#                     clear
+#                     # 提示用户输入内容
+#                     echo "输入例子 v1.4.0-rc.3 或 v1.4.0-beta.1 或 v1.3.6"
+#                     read -p "请输入要编译的版本号： " user_input
 
-                    # 构建完整的命令
-                    command="go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+#                     # 构建完整的命令
+#                     command="go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
 
-                    # 打印最终的命令
-                    echo "将要编译的版本是："
-                    echo "$user_input"
+#                     # 打印最终的命令
+#                     echo "将要编译的版本是："
+#                     echo "$user_input"
 
-                    # 确认是否执行命令
-                    read -p "是否要执行上述命令？(y/n) " execute
-                    if [ "$execute" == "y" ]; then
-                        # 执行命令
-                        clear
-                        eval "$command"
-                        # 检查命令是否执行成功
-                        if [ $? -eq 0 ]; then
-                             echo "------------------------"
-                             echo "指令运行完成，内核所在位置："
-                             echo "/root/go/bin/sing-box"
-                             echo "------------------------"
-                        else
-                            echo "------------------------"
-                            echo "编译未完成，请检查输入的版本号是否正确"
-                            echo "------------------------"
-                        fi
-                    else
-                       echo "已取消执行命令。"
-                    fi
-                    ;;
+#                     # 确认是否执行命令
+#                     read -p "是否要执行上述命令？(y/n) " execute
+#                     if [ "$execute" == "y" ]; then
+#                         # 执行命令
+#                         clear
+#                         eval "$command"
+#                         # 检查命令是否执行成功
+#                         if [ $? -eq 0 ]; then
+#                              echo "------------------------"
+#                              echo "指令运行完成，内核所在位置："
+#                              echo "/root/go/bin/sing-box"
+#                              echo "------------------------"
+#                         else
+#                             echo "------------------------"
+#                             echo "编译未完成，请检查输入的版本号是否正确"
+#                             echo "------------------------"
+#                         fi
+#                     else
+#                        echo "已取消执行命令。"
+#                     fi
+#                     ;;
 
-                0)
-                    /root/jms.sh
-                    exit
-                    ;;
+#                 0)
+#                     /root/jms.sh
+#                     exit
+#                     ;;
 
-                *)
-                    echo "无效的输入!"
-                    ;;
+#                 *)
+#                     echo "无效的输入!"
+#                     ;;
 
-            esac
-            echo -e "\033[0;32m操作完成\033[0m"
-            echo "按任意键继续..."
-            read -n 1 -s -r -p ""
-            echo ""
-            clear
-        done
+#             esac
+#             echo -e "\033[0;32m操作完成\033[0m"
+#             echo "按任意键继续..."
+#             read -n 1 -s -r -p ""
+#             echo ""
+#             clear
+#         done
 
-          ;;
+#           ;;
 
-          0)
-              /root/jms.sh
-              exit
-              ;;
+#           0)
+#               /root/jms.sh
+#               exit
+#               ;;
 
-          *)
-              echo "无效的输入!"
-              ;;
-      esac
-      echo -e "\033[0;32m操作完成\033[0m"
-      echo "按任意键继续..."
-      read -n 1 -s -r -p ""
-      echo ""
-      clear
-  done
+#           *)
+#               echo "无效的输入!"
+#               ;;
+#       esac
+#       echo -e "\033[0;32m操作完成\033[0m"
+#       echo "按任意键继续..."
+#       read -n 1 -s -r -p ""
+#       echo ""
+#       clear
+#   done
 
-    ;;
+#     ;;
 
   7)
   while true; do
@@ -952,22 +953,23 @@ case $choice in
       echo "1. 开启BBR+关闭ECN+优化+升级一键脚本"
       echo "2. DD脚本"
       echo "3. WARP一键脚本"
+      echo "4. 一键修改SSH登录端口"
       echo "------------------------"
       echo "测试相关脚本"
-      echo "4. VPS启动耗时"
-      echo "5. 硬盘测试"
-      echo "6. 流媒体检测"
-      echo "7. 三网回程测试TCP"
-      echo "8. 三网回程测试ICMP"
-      echo "9. 三网回程测试TCP/ICMP"
-      echo "10. 三网测速"
-      echo "11. LemonBench 一键测试脚本 ▶"
+      echo "31. VPS启动耗时"
+      echo "32. 硬盘测试"
+      echo "33. 流媒体检测"
+      echo "34. 三网回程测试TCP"
+      echo "35. 三网回程测试ICMP"
+      echo "36. 三网回程测试TCP/ICMP"
+      echo "37. 三网测速"
+      echo "38. LemonBench 一键测试脚本 ▶"
       echo "------------------------"
       echo "翻墙脚本"
-      echo "12. X-UI"
-      echo "13. 3X-UI"
-      echo "14. xray8合1一键部署脚本"
-      echo "15. Hysteria一键脚本"
+      echo "51. X-UI"
+      echo "53. 3X-UI"
+      echo "54. xray8合1一键部署脚本"
+      echo "55. Hysteria一键脚本"
       echo "------------------------"
       echo "0. 返回主菜单"
       echo "------------------------"
@@ -991,41 +993,76 @@ case $choice in
 
           4)
               clear
+              # 提示用户输入内容
+              echo "输入例子 1024 或 12345"
+              read -p "请输入SSH的端口： " user_input
+
+              # 构建完整的命令
+              command="bash <(curl -fsSL git.io/key.sh) -o -p $user_input"
+
+              # 打印最终的命令
+              echo "将要更改的SSH登录端口是："
+              echo "$user_input"
+
+              # 确认是否执行命令
+              read -p "是否要执行更换SSH登录端口？(y/n) " execute
+              if [ "$execute" == "y" ]; then
+                  # 执行命令
+                  clear
+                  eval "$command"
+                  # 检查命令是否执行成功
+                  if [ $? -eq 0 ]; then
+                       echo "------------------------"
+                       echo "更换完成，当前SSH登录端口是："
+                       echo "$user_input"
+                       echo "------------------------"
+                  else
+                      echo "------------------------"
+                      echo "更换未完成，当前SSH登录端口未更换"
+                      echo "------------------------"
+                  fi
+              else
+                 echo "已取消执行命令。"
+              fi
+              ;;
+
+          31)
+              clear
               systemd-analyze
               ;;
 
-          5)
+          32)
               clear
               echo "耗时较长，请耐心等待 (数值越高越好)"
               dd bs=64k count=4k if=/dev/zero of=test oflag=dsync
               ;;
 
-          6)
+          33)
               clear
               bash <(curl -L -s check.unlock.media)
               ;;
 
-          7)
+          34)
               clear
               curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash
               ;;
 
-          8)
+          35)
               clear
               curl https://raw.githubusercontent.com/zhanghanyun/backtrace/main/install.sh -sSf | sh
               ;;
 
-          9)
+          36)
               clear
               wget https://raw.githubusercontent.com/vpsxb/testrace/main/testrace.sh -O testrace.sh && bash testrace.sh
               ;;
 
-          10)
+          37)
               clear
               bash <(curl -Lso- https://git.io/superspeed_uxh)
               ;;
 
-          11)
+          38)
             while true; do
             clear
             echo "LemonBench 一键测试脚本"
@@ -1079,22 +1116,22 @@ case $choice in
 
           ;;
 
-          12)
+          51)
               clear
               bash <(curl -Ls https://raw.githubusercontent.com/FranzKafkaYu/x-ui/master/install.sh)
               ;;
 
-          13)
+          53)
               clear
               bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
               ;;
 
-          14)
+          54)
               clear
               wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
               ;;
 
-          15)
+          55)
               clear
               bash <(curl -fsSL https://git.io/hysteria.sh)
               ;;
@@ -1137,7 +1174,7 @@ case $choice in
     echo "------------------------"
     echo "删除快捷方式："
     echo ""
-    echo "sed -i '/alias jms=.*Bash/d' .bashrc"
+    echo "sed -i '/alias jms=.*Bash/d' .bashrc && source ~/.bashrc"
     echo ""
     echo "------------------------"
     echo "如需卸载脚本，请自行运行:"

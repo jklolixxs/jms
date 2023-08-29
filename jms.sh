@@ -409,7 +409,7 @@ case $choice in
           1)
               clear
               curl -fsSL https://get.docker.com | sh
-              sudo systemctl start docker
+              systemctl start docker
               curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
               ;;
           2)
@@ -728,7 +728,7 @@ case $choice in
 
             # Check if the system is Ubuntu or Deepin
             elif [ -f /etc/lsb-release ] && grep -qi "ubuntu\|deepin" /etc/lsb-release; then
-                wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && sudo bash install.sh aapanel
+                wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && bash install.sh aapanel
 
             # Check if the system is CentOS
             elif [ -f /etc/centos-release ]; then
@@ -1082,9 +1082,9 @@ case $choice in
                           if [[ -f /etc/os-release ]]; then
                               source /etc/os-release
                               if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
-                                  sudo dpkg -i sing-box.deb
+                                  dpkg -i sing-box.deb
                               elif [[ "$ID" == "centos" ]]; then
-                                  sudo rpm -i sing-box.rpm
+                                  rpm -i sing-box.rpm
                               else
                                   echo "不支持的操作系统类型"
                                   exit 1
@@ -1104,11 +1104,11 @@ case $choice in
                               source /etc/os-release
                               if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
                                   echo "------------------------"
-                                  sudo dpkg -c sing-box.deb
+                                  dpkg -c sing-box.deb
                                   echo "------------------------"
                               elif [[ "$ID" == "centos" ]]; then
                                   echo "------------------------"
-                                  sudo rpm -c sing-box.rpm
+                                  rpm -c sing-box.rpm
                                   echo "------------------------"
                               else
                                   echo "不支持的操作系统类型"
@@ -1167,8 +1167,8 @@ case $choice in
               
                           go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
                           curl -Lo go.tar.gz "https://go.dev/dl/go$go_version.linux-amd64.tar.gz"
-                          sudo rm -rf /usr/local/go
-                          sudo tar -C /usr/local -xzf go.tar.gz
+                          rm -rf /usr/local/go
+                          tar -C /usr/local -xzf go.tar.gz
                           rm go.tar.gz
                           ;;
               

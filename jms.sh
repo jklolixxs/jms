@@ -19,6 +19,7 @@ echo "3. 系统清理"
 echo "------------------------"
 echo "4. 常用工具安装 ▶"
 echo "5. Docker管理 ▶"
+echo "6. aaPanel管理 ▶"
 echo "------------------------"
 echo "7. 一些常用脚本 ▶"
 echo "------------------------"
@@ -353,25 +354,12 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-
-
-          31)
+            16)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
               elif command -v yum &>/dev/null; then
                   yum -y update && yum -y install curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
-              else
-                  echo "未知的包管理器!"
-              fi
-              ;;
-
-          32)
-              clear
-              if command -v apt &>/dev/null; then
-                  apt remove -y htop iftop unzip tmux ffmpeg
-              elif command -v yum &>/dev/null; then
-                  yum -y remove htop iftop unzip tmux ffmpeg
               else
                   echo "未知的包管理器!"
               fi
@@ -707,9 +695,121 @@ case $choice in
       read -n 1 -s -r -p ""
       echo ""
       clear
-
     done
+    ;;
 
+  6)
+    while true; do
+      clear
+      echo "aaPanel管理"
+      echo "------------------------"
+      echo "1. 安装aaPanel"
+      echo "2. BT官方修改脚本"
+      echo "3. 查看官方修改脚本翻译"
+      echo "------------------------"
+      echo "4. 启动aaPanel"
+      echo "5. 停止aaPanel"
+      echo "6. 重新启动aaPanel"
+      echo "------------------------"
+      echo "7. 查看控制面板错误日志"
+      echo "8. 查看数据库错误日志"
+      echo "------------------------"
+      echo "99. 卸载aaPanel"
+      echo "------------------------"
+      echo "0. 返回主菜单"
+      echo "------------------------"
+      read -p "请输入你的选择: " sub_choice
+
+      case $sub_choice in
+          1)
+            # Check if the system is Debian
+            if [ -f /etc/debian_version ]; then
+                wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && bash install.sh aapanel
+
+            # Check if the system is Ubuntu or Deepin
+            elif [ -f /etc/lsb-release ] && grep -qi "ubuntu\|deepin" /etc/lsb-release; then
+                wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && sudo bash install.sh aapanel
+
+            # Check if the system is CentOS
+            elif [ -f /etc/centos-release ]; then
+                yum install -y wget && wget -O install.sh http://www.aapanel.com/script/install_6.0_en.sh && bash install.sh aapanel
+
+            # If the system is not recognized, display an error message
+            else
+                echo "不支持的系统"
+            fi
+            ;;
+
+          2)
+            clear
+            bt
+            ;;
+
+          3)
+            clear
+            echo "===============aaPanel CLI（命令行界面）==============="
+            echo "(1) 重启面板                          (8) 更改面板端口"
+            echo "(2) 停止面板                          (9) 清除面板缓存"
+            echo "(3) 启动面板                          (10) 清除登录限制"
+            echo "(4) 重新加载面板                      (11) 取消入口限制"
+            echo "(5) 更改面板密码                      (12) 取消域名绑定限制"
+            echo "(6) 更改面板用户名                    (13) 取消IP访问限制"
+            echo "(7) 强制更改MySQL根密码               (14) 查看面板默认信息"
+            echo "(22) 显示面板错误日志                 (15) 清除系统垃圾"
+            echo "(23) 关闭BasicAuth身份验证            (16) 修复面板（检查错误并更新面板文件到最新版本）"
+            echo "(24) 关闭Google Authenticator         (17) 设置日志切割开关/压缩"
+            echo "(25) 设置是否保存文件的历史副本        (18) 设置是否自动备份面板"
+            echo "(26) 在备份到云存储时保留/移除本地备份 (0) 取消"
+            ;;
+
+          4)
+            clear
+            service bt stop
+            echo "已执行启动命令"
+            ;;
+
+          5)
+            clear
+            service bt start
+            echo "已执行停止命令"
+            ;;
+
+          6)
+            clear
+            service bt restart
+            echo "已执行重启命令"
+            ;;
+
+          7)
+            clear
+            cat /tmp/panelBoot
+            ;;
+
+          8)
+            clear
+            cat /www/server/data/*.err
+            ;;
+
+          99)
+            clear
+            wget http://download.bt.cn/install/bt-uninstall.sh && sh bt-uninstall.sh
+            ;;
+
+    0)
+      /root/jms.sh
+      exit
+      ;;
+
+    *)
+      echo "无效的输入!"
+      esac
+
+    echo -e "\033[0;32m操作完成\033[0m"
+    echo "按任意键继续..."
+    read -n 1 -s -r -p ""
+    echo ""
+    clear
+  done
     ;;
 
   7)
@@ -901,7 +1001,6 @@ case $choice in
             echo ""
             clear
         done
-
           ;;
 
           51)
@@ -1233,22 +1332,17 @@ case $choice in
       echo ""
       clear
   done
-
     ;;
 
   11)
     clear
-    shortcut_added=false
-        if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
-            echo "alias jms='/root/jms.sh'" >> ~/.bashrc
-            shortcut_added=true
-        fi
-        if [ "$shortcut_added" = true ]; then
-            source ~/.bashrc
-        fi
+    if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
+      echo "alias jms='/root/jms.sh'" >> ~/.bashrc
+      shortcut_added=true
+    fi
     echo "------------------------"
     echo "添加成功"
-    echo "请重启或手动输入指令同步缓存："
+    echo "请手动输入下面这条指令同步缓存："
     echo "------------------------"
     echo "source ~/.bashrc"
     echo "------------------------"
@@ -1272,10 +1366,12 @@ case $choice in
   99)
     clear
     sed -i '/alias jms=.*jms.sh/d' .bashrc
-    source ~/.bashrc
     rm -f /root/jms.sh
     echo "------------------------"
     echo "脚本删除成功"
+    echo "请手动输入下面这条指令同步缓存："
+    echo "------------------------"
+    echo "source ~/.bashrc"
     echo "------------------------"
     exit
     ;;

@@ -1163,13 +1163,25 @@ case $choice in
               
                       5)
                           clear
-                          set -e -o pipefail
-              
-                          go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
-                          curl -Lo go.tar.gz "https://go.dev/dl/go$go_version.linux-amd64.tar.gz"
-                          rm -rf /usr/local/go
-                          tar -C /usr/local -xzf go.tar.gz
-                          rm go.tar.gz
+                          # Get the latest Go version from the official website
+                          latest_version=$(curl -sSfL https://go.dev/dl/ | grep -oE 'go[0-9]+\.[0-9]+\.[0-9]*' | head -n 1)
+                          clear
+
+                          echo "获取到go的最新版为：$latest_version"
+                          echo "------------------------"
+
+                          # Construct the download URL
+                          download_url="https://go.dev/dl/${latest_version}.linux-amd64.tar.gz"
+                          echo "开始下载"
+                          wget -q -c $download_url -O - | tar -xz -C /usr/local && echo 'export PATH=$PATH:/usr/local/go/bin' > /etc/profile
+                          rm -f /root/$latest_version.linux-amd64.tar.gz
+                          source /etc/profile
+                          sleep 1
+                          clear
+                          echo "下载完成，请手动执行此条命令用于为go配置环境："
+                          echo "------------------------"
+                          echo "source /etc/profile"
+                          echo "------------------------"
                           ;;
               
                       6)
@@ -1188,12 +1200,12 @@ case $choice in
                         case $sub_choice in
                             1)
                                 clear
-                                go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
+                                /usr/local/go/bin/go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
                                 ;;
               
                             2)
                                 clear
-                                go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
+                                /usr/local/go/bin/go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
                                 ;;
               
                             3)
@@ -1213,7 +1225,7 @@ case $choice in
                                 clear
               
                                 # 构建完整的命令
-                                command="go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+                                command="/usr/local/go/bin/go install -v -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
               
                                 # 打印最终的命令
                                 echo "将要编译的版本是："
@@ -1338,7 +1350,7 @@ case $choice in
     clear
     if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
       echo "alias jms='/root/jms.sh'" >> ~/.bashrc
-      shortcut_added=true
+      source  ~/.bashrc
     fi
     echo "------------------------"
     echo "添加成功"
@@ -1366,6 +1378,7 @@ case $choice in
   99)
     clear
     sed -i '/alias jms=.*jms.sh/d' .bashrc
+    source ~/.bashrc
     rm -f /root/jms.sh
     echo "------------------------"
     echo "脚本删除成功"

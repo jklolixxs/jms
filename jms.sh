@@ -184,20 +184,21 @@ case $choice in
       echo "------------------------"
       echo "1. curl 下载工具"
       echo "2. wget 下载工具"
-      echo "3. sudo 超级管理权限工具"
-      echo "4. ufw 防火墙管理工具 (仅建议Debian/Ubuntu安装)"
-      echo "5. screen 多终端窗口后台运行工具"
-      echo "6. socat 通信连接工具 (申请域名证书必备)"
-      echo "7. dnsutils DNS相关工具 (仅限Debian/Ubuntu安装)"
-      echo "8. bind-utils DNS相关工具 (仅限Centos安装)"
-      echo "9. cpulimit 限制CPU使用率"
-      echo "10. htop 系统监控工具"
-      echo "11. chrony NTP时间同步工具"
-      echo "12. iftop 网络流量监控工具"
-      echo "13. unzip ZIP压缩解压工具z"
-      echo "14. tar GZ压缩解压工具"
-      echo "15. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
-      echo "16. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
+      echo "3. git 分布式版本控制系统"
+      echo "4. sudo 超级管理权限工具"
+      echo "5. ufw 防火墙管理工具 (仅建议Debian/Ubuntu安装)"
+      echo "6. screen 多终端窗口后台运行工具"
+      echo "7. socat 通信连接工具 (申请域名证书必备)"
+      echo "8. dnsutils DNS相关工具 (仅限Debian/Ubuntu安装)"
+      echo "9. bind-utils DNS相关工具 (仅限Centos安装)"
+      echo "10. cpulimit 限制CPU使用率"
+      echo "11. htop 系统监控工具"
+      echo "12. chrony NTP时间同步工具"
+      echo "13. iftop 网络流量监控工具"
+      echo "14. unzip ZIP压缩解压工具z"
+      echo "15. tar GZ压缩解压工具"
+      echo "16. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
+      echo "17. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
       echo "------------------------"
       echo "31. 全部安装"
       echo "32. 全部卸载"
@@ -231,6 +232,16 @@ case $choice in
             3)
               clear
               if command -v apt &>/dev/null; then
+                  apt update -y && apt install -y git
+              elif command -v yum &>/dev/null; then
+                  yum -y update && yum -y install git
+              else
+                  echo "未知的包管理器!"
+              fi
+              ;;
+            4)
+              clear
+              if command -v apt &>/dev/null; then
                   apt update -y && apt install -y sudo
               elif command -v yum &>/dev/null; then
                   yum -y update && yum -y install sudo
@@ -238,7 +249,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            4)
+            5)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y ufw
@@ -248,7 +259,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            5)
+            6)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y screen
@@ -258,7 +269,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            6)
+            7)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y socat
@@ -268,7 +279,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            7)
+            8)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y dnsutils
@@ -276,7 +287,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            8)
+            9)
               clear
               if command -v yum &>/dev/null; then
                   yum -y update && yum -y install bind-utils
@@ -284,7 +295,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            9)
+            10)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y cpulimit
@@ -294,7 +305,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            10)
+            11)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y htop
@@ -304,7 +315,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            11)
+            12)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y chrony
@@ -314,7 +325,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            12)
+            13)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y iftop
@@ -324,7 +335,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            13)
+            14)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y unzip
@@ -334,7 +345,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            14)
+            15)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y tar
@@ -344,7 +355,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            15)
+            16)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y screenfetch
@@ -354,7 +365,7 @@ case $choice in
                   echo "未知的包管理器!"
               fi
               ;;
-            16)
+            17)
               clear
               if command -v apt &>/dev/null; then
                   apt update -y && apt install -y jq
@@ -367,9 +378,9 @@ case $choice in
             31)
               clear
               if command -v apt &>/dev/null; then
-                  apt update -y && apt install -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
+                  apt update -y && apt install -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
               elif command -v yum &>/dev/null; then
-                  yum -y update && yum -y install curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
+                  yum -y update && yum -y install curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
               else
                   echo "未知的包管理器!"
               fi
@@ -377,9 +388,9 @@ case $choice in
             32)
               clear
               if command -v apt &>/dev/null; then
-                  apt update -y && apt remove -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
+                  apt update -y && apt remove -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
               elif command -v yum &>/dev/null; then
-                  yum -y update && yum -y remove curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
+                  yum -y update && yum -y remove curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
               else
                   echo "未知的包管理器!"
               fi

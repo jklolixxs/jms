@@ -357,9 +357,29 @@ case $choice in
             16)
               clear
               if command -v apt &>/dev/null; then
+                  apt update -y && apt install -y jq
+              elif command -v yum &>/dev/null; then
+                  yum -y update && yum -y install jq
+              else
+                  echo "未知的包管理器!"
+              fi
+              ;;
+            31)
+              clear
+              if command -v apt &>/dev/null; then
                   apt update -y && apt install -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
               elif command -v yum &>/dev/null; then
                   yum -y update && yum -y install curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
+              else
+                  echo "未知的包管理器!"
+              fi
+              ;;
+            32)
+              clear
+              if command -v apt &>/dev/null; then
+                  apt update -y && apt remove -y curl wget sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
+              elif command -v yum &>/dev/null; then
+                  yum -y update && yum -y remove curl wget sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
               else
                   echo "未知的包管理器!"
               fi

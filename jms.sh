@@ -1000,12 +1000,12 @@ case $choice in
             case $sub_choice in
                 1)
                     clear
-                    wget -O- https://ilemonra.in/LemonBench | bash -s -- --fast
+                    wget -qO- yabs.sh | bash
                     ;;
 
                 2)
                     clear
-                    curl -fsL https://ilemonra.in/LemonBench | bash -s -- --fast
+                    curl -sL yabs.sh | bash
                     ;;
 
                 3)

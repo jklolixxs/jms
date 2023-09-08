@@ -21,7 +21,7 @@ echo "4. 常用工具安装 ▶"
 echo "5. Docker管理 ▶"
 echo "6. aaPanel管理 ▶"
 echo "------------------------"
-echo "7. 一些常用脚本 ▶"
+echo "10. 一些常用脚本 ▶"
 echo "------------------------"
 echo "0. 退出脚本"
 echo "------------------------"
@@ -844,7 +844,7 @@ case $choice in
   done
     ;;
 
-  7)
+  10)
   while true; do
       clear
       # Update system on Debian-based systems
@@ -881,7 +881,8 @@ case $choice in
       echo "35. 三网回程测试ICMP"
       echo "36. 三网回程测试TCP/ICMP"
       echo "37. 三网测速"
-      echo "38. LemonBench 一键测试脚本 ▶"
+      echo "38. Yet-Another-Bench-Script 一键测试脚本 ▶"
+      echo "39. LemonBench 一键测试脚本 ▶"
       echo "------------------------"
       echo "翻墙脚本"
       echo "51. X-UI"
@@ -983,6 +984,213 @@ case $choice in
               ;;
 
           38)
+            while true; do
+            clear
+            echo "Yet-Another-Bench-Script 一键测试脚本"
+            echo "------------------------"
+            echo "1. wget获取"
+            echo "2. curl获取"
+            echo "3. 携带参数 - wget获取 ▶"
+            echo "4. 携带参数 - curl获取 ▶"
+            echo "------------------------"
+            echo "0. 返回主菜单"
+            echo "------------------------"
+            read -p "请输入你的选择: " sub_choice
+
+            case $sub_choice in
+                1)
+                    clear
+                    wget -O- https://ilemonra.in/LemonBench | bash -s -- --fast
+                    ;;
+
+                2)
+                    clear
+                    curl -fsL https://ilemonra.in/LemonBench | bash -s -- --fast
+                    ;;
+
+                3)
+                   while true; do
+                   clear
+                   echo "wget 版"
+                   echo "------------------------"
+                   echo "1. 生成测试脚本链接"
+                   echo "2. 查询参数"
+                   echo "------------------------"
+                   echo "0. 返回主菜单"
+                   echo "------------------------"
+                   read -p "请输入你的选择: " sub_choice
+
+                   case $sub_choice in
+                       1)
+                           clear
+                           echo "------------------------"
+                           echo "-b: 强制使用仓库中的预编译二进制文件，而不使用本地包"
+                           echo "-f/-d: 禁用fio（磁盘性能）测试"
+                           echo "-i: 禁用iperf（网络性能）测试"
+                           echo "-g: 禁用Geekbench（系统性能）测试"
+                           echo "-n: 跳过网络信息查找和打印"
+                           echo "-h: 打印帮助信息，包括用法、检测到的标志和本地包（fio/iperf）状态"
+                           echo "-r: 减少iperf位置的数量（Scaleway/Clouvider LON+NYC）以减少带宽使用"
+                           echo "-4: 运行Geekbench 4测试并禁用Geekbench 6测试"
+                           echo "-5: 运行Geekbench 5测试并禁用Geekbench 6测试"
+                           echo "-9: 运行Geekbench 4和5测试，而不运行Geekbench 6测试"
+                           echo "-6: 如果使用了以下任何一个标志：-4、-5或-9，则重新启用Geekbench 6测试（-6标志必须放在最后以防被覆盖）"
+                           echo "-j: 将结果以JSON格式打印到屏幕上"
+                           echo "-w <文件名>: 使用提供的文件名将JSON结果写入文件"
+                           echo "-s <URL>: 将结果以JSON格式发送到指定的URL（见下文部分）"
+                           echo "------------------------"
+                           echo "选项可以组合在一起跳过多个测试"
+                           echo "例子："
+                           echo "-fg 跳过磁盘和系统性能测试（实际上只测试网络性能）"
+                           echo "输入的参数需要携带 - "
+                           read -p "请输入参数: " input
+
+                           # 构建完整的wget命令
+                           wget_command="wget -qO- yabs.sh | bash -s -- $input"
+
+                           # 执行wget命令
+                           eval "$wget_command"
+                           ;;
+
+                       2)
+                           clear
+                           echo "------------------------"
+                           echo "-b: Forces use of pre-compiled binaries from repo over local packages"
+                           echo "-f/-d: Disables the fio (disk performance) test"
+                           echo "-i: Disables the iperf (network performance) test"
+                           echo "-g: Disables the Geekbench (system performance) test"
+                           echo "-n: Skips the network information lookup and print out"
+                           echo "-h: Prints the help message with usage, flags detected, and local package (fio/iperf) status"
+                           echo "-r: Reduces the number of iperf locations (Scaleway/Clouvider LON+NYC) to lessen bandwidth usage"
+                           echo "-4: Runs a Geekbench 4 test and disables the Geekbench 6 test"
+                           echo "-5: Runs a Geekbench 5 test and disables the Geekbench 6 test"
+                           echo "-9: Runs both the Geekbench 4 and 5 tests instead of the Geekbench 6 test"
+                           echo "-6: Re-enables the Geekbench 6 test if any of the following were used: -4, -5, or -9 (-6 flag must be last to not be overridden)"
+                           echo "-j: Prints a JSON representation of the results to the screen"
+                           echo "-w <filename>: Writes the JSON results to a file using the file name provided"
+                           echo "-s <url>: Sends a JSON representation of the results to the designated URL(s) (see section below)"
+                           echo "------------------------"
+                           ;;
+
+                       0)
+                           /root/jms.sh
+                           exit
+                           ;;
+
+                       *)
+                           echo "无效的输入!"
+                           ;;
+
+                   esac
+                   echo -e "\033[0;32m操作完成\033[0m"
+                   echo "按任意键继续..."
+                   read -n 1 -s -r -p ""
+                   echo ""
+                   clear
+               done
+                 ;;
+
+                4)
+                   while true; do
+                   clear
+                   echo "curl 版"
+                   echo "------------------------"
+                   echo "1. 生成测试脚本链接"
+                   echo "2. 查询参数"
+                   echo "------------------------"
+                   echo "0. 返回主菜单"
+                   echo "------------------------"
+                   read -p "请输入你的选择: " sub_choice
+
+                   case $sub_choice in
+                       1)
+                           clear
+                           echo "------------------------"
+                           echo "-b: 强制使用仓库中的预编译二进制文件，而不使用本地包"
+                           echo "-f/-d: 禁用fio（磁盘性能）测试"
+                           echo "-i: 禁用iperf（网络性能）测试"
+                           echo "-g: 禁用Geekbench（系统性能）测试"
+                           echo "-n: 跳过网络信息查找和打印"
+                           echo "-h: 打印帮助信息，包括用法、检测到的标志和本地包（fio/iperf）状态"
+                           echo "-r: 减少iperf位置的数量（Scaleway/Clouvider LON+NYC）以减少带宽使用"
+                           echo "-4: 运行Geekbench 4测试并禁用Geekbench 6测试"
+                           echo "-5: 运行Geekbench 5测试并禁用Geekbench 6测试"
+                           echo "-9: 运行Geekbench 4和5测试，而不运行Geekbench 6测试"
+                           echo "-6: 如果使用了以下任何一个标志：-4、-5或-9，则重新启用Geekbench 6测试（-6标志必须放在最后以防被覆盖）"
+                           echo "-j: 将结果以JSON格式打印到屏幕上"
+                           echo "-w <文件名>: 使用提供的文件名将JSON结果写入文件"
+                           echo "-s <URL>: 将结果以JSON格式发送到指定的URL（见下文部分）"
+                           echo "------------------------"
+                           echo "选项可以组合在一起跳过多个测试"
+                           echo "例子："
+                           echo "-fg 跳过磁盘和系统性能测试（实际上只测试网络性能）"
+                           echo "输入的参数需要携带 - "
+                           read -p "请输入参数: " input
+
+                           # 构建完整的curl命令
+                           curl_command="curl -sL yabs.sh | bash -s -- $input"
+
+                           # 执行curl命令
+                           eval "$curl_command"
+                           ;;
+
+                       2)
+                           clear
+                           echo "------------------------"
+                           echo "-b: Forces use of pre-compiled binaries from repo over local packages"
+                           echo "-f/-d: Disables the fio (disk performance) test"
+                           echo "-i: Disables the iperf (network performance) test"
+                           echo "-g: Disables the Geekbench (system performance) test"
+                           echo "-n: Skips the network information lookup and print out"
+                           echo "-h: Prints the help message with usage, flags detected, and local package (fio/iperf) status"
+                           echo "-r: Reduces the number of iperf locations (Scaleway/Clouvider LON+NYC) to lessen bandwidth usage"
+                           echo "-4: Runs a Geekbench 4 test and disables the Geekbench 6 test"
+                           echo "-5: Runs a Geekbench 5 test and disables the Geekbench 6 test"
+                           echo "-9: Runs both the Geekbench 4 and 5 tests instead of the Geekbench 6 test"
+                           echo "-6: Re-enables the Geekbench 6 test if any of the following were used: -4, -5, or -9 (-6 flag must be last to not be overridden)"
+                           echo "-j: Prints a JSON representation of the results to the screen"
+                           echo "-w <filename>: Writes the JSON results to a file using the file name provided"
+                           echo "-s <url>: Sends a JSON representation of the results to the designated URL(s) (see section below)"
+                           echo "------------------------"
+                           ;;
+
+                       0)
+                           /root/jms.sh
+                           exit
+                           ;;
+
+                       *)
+                           echo "无效的输入!"
+                           ;;
+
+                   esac
+                   echo -e "\033[0;32m操作完成\033[0m"
+                   echo "按任意键继续..."
+                   read -n 1 -s -r -p ""
+                   echo ""
+                   clear
+               done
+                 ;;
+
+                0)
+                    /root/jms.sh
+                    exit
+                    ;;
+
+                *)
+                    echo "无效的输入!"
+                    ;;
+
+            esac
+            echo -e "\033[0;32m操作完成\033[0m"
+            echo "按任意键继续..."
+            read -n 1 -s -r -p ""
+            echo ""
+            clear
+        done
+          ;;
+
+          39)
             while true; do
             clear
             echo "LemonBench 一键测试脚本"

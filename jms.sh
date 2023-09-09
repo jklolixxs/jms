@@ -19,6 +19,7 @@ echo "3. 常用工具安装 ▶"
 echo "------------------------"
 echo "5. Docker管理 ▶"
 echo "6. aaPanel管理 ▶"
+echo "7. Sing-Box管理 ▶"
 echo "------------------------"
 echo "30. 一些常用脚本 ▶"
 echo "------------------------"
@@ -1069,6 +1070,275 @@ case $choice in
       99)
         clear
         wget http://download.bt.cn/install/bt-uninstall.sh && sh bt-uninstall.sh
+        ;;
+      0)
+        break  # 跳出循环，退出菜单
+        ;;
+      *)
+        echo "无效的输入!"
+        ;;
+    esac
+      echo -e "\033[0;32m操作完成\033[0m"
+      echo "按任意键继续..."
+      read -n 1 -s -r -p ""
+      echo ""
+      clear
+    done
+    ;;
+  7)
+    while true; do
+    clear
+    echo "Sing-Box相关"
+    echo "--------使用官方内核--------"
+    echo "1. 下载Sing-Box官方内核"
+    echo "2. 安装Sing-Box官方内核"
+    echo "3. 查看Sing-Box官方内核安装位置"
+    echo "4. 卸载Sing-Box官方内核"
+    echo "---------自行编译---------"
+    echo "5. 安装go"
+    echo "6. 编译Sing-box全flags内核 ▶"
+    echo "------------------------"
+    echo "99. 目前已知问题的解决方案 ▶"
+    echo "------------------------"
+    echo "0. 返回主菜单"
+    echo "------------------------"
+    read -p "请输入你的选择: " sub_choice
+    case $sub_choice in
+      1)
+        clear
+        # 提示用户输入版本号
+        read -p "请输入版本号: " desired_version
+        # 检查操作系统类型
+        if [[ -f /etc/os-release ]]; then
+          source /etc/os-release
+          if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+            file_extension="deb"
+          elif [[ "$ID" == "centos" ]]; then
+            file_extension="rpm"
+          else
+            echo "不支持的操作系统类型"
+            exit 1
+          fi
+        else
+          echo "无法确定操作系统类型"
+          exit 1
+        fi
+        # 构建下载链接
+        download_link="https://github.com/SagerNet/sing-box/releases/download/v${desired_version}/sing-box_${desired_version}_linux_amd64.${file_extension}"
+        # 输出下载链接
+        echo "下载链接: $download_link"
+        # 使用curl命令下载文件
+        curl -L -o sing-box.${file_extension} $download_link
+        echo "文件下载完成！"
+        ;;
+      2)
+        clear
+        # 检查操作系统类型
+        if [[ -f /etc/os-release ]]; then
+          source /etc/os-release
+          if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+            dpkg -i sing-box.deb
+          elif [[ "$ID" == "centos" ]]; then
+            rpm -i sing-box.rpm
+          else
+            echo "不支持的操作系统类型"
+            exit 1
+          fi
+        else
+          echo "无法确定操作系统类型"
+          exit 1
+        fi
+        echo "软件安装完成！"
+        ;;
+      3)
+        clear
+        # 检查操作系统类型
+        if [[ -f /etc/os-release ]]; then
+          source /etc/os-release
+          if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+            echo "------------------------"
+            dpkg -c sing-box.deb
+            echo "------------------------"
+          elif [[ "$ID" == "centos" ]]; then
+            echo "------------------------"
+            rpm -c sing-box.rpm
+            echo "------------------------"
+          else
+            echo "不支持的操作系统类型"
+            exit 1
+          fi
+        else
+          echo "无法确定操作系统类型"
+          exit 1
+        fi
+        ;;
+      4)
+        clear
+        # 检查操作系统类型
+        if [[ -f /etc/os-release ]]; then
+          source /etc/os-release
+          if [[ "$ID" == "ubuntu" || "$ID" == "debian" ]]; then
+            echo "------------------------"
+            echo "开始卸载"
+            rm -f /root/sing-box.deb
+            rm -f /etc/systemd/system/sing-box.service
+            rm -f /etc/systemd/system/sing-box@.service
+            rm -f /usr/bin/sing-box
+            rm -rf /etc/sing-box
+            rm -rf /usr/share/licenses/
+            sleep 1
+            echo "------------------------"
+            echo "卸载完成"
+            echo "------------------------"
+          elif [[ "$ID" == "centos" ]]; then
+            echo "------------------------"
+            echo "开始卸载"
+            rm -f /root/sing-box.rpm
+            rm -f /etc/systemd/system/sing-box.service
+            rm -f /etc/systemd/system/sing-box@.service
+            rm -f /usr/bin/sing-box
+            rm -rf /etc/sing-box
+            rm -rf /usr/share/licenses/
+            sleep 1
+            echo "------------------------"
+            echo "卸载完成"
+            echo "------------------------"
+          else
+            echo "不支持的操作系统类型"
+            exit 1
+          fi
+        else
+          echo "无法确定操作系统类型"
+          exit 1
+        fi
+        ;;
+      5)
+        clear
+        # Get the latest Go version from the official website
+        latest_version=$(curl -sSfL https://go.dev/dl/ | grep -oE 'go[0-9]+\.[0-9]+\.[0-9]*' | head -n 1)
+        clear
+        echo "获取到go的最新版为：$latest_version"
+        echo "------------------------"
+        # Construct the download URL
+        download_url="https://go.dev/dl/${latest_version}.linux-amd64.tar.gz"
+        echo "开始下载"
+        wget -q -c $download_url -O - | tar -xz -C /usr/local && echo 'export PATH=$PATH:/usr/local/go/bin' > /etc/profile
+        rm -f /root/$latest_version.linux-amd64.tar.gz
+        source /etc/profile
+        sleep 1
+        clear
+        echo "下载完成，请手动执行此条命令用于为go配置环境："
+        echo "------------------------"
+        echo "source /etc/profile"
+        echo "------------------------"
+        ;;
+      6)
+        while true; do
+        clear
+        echo "Sing-Box相关"
+        echo "------------------------"
+        echo "1. 编译最新Latest版"
+        echo "2. 编译最新dev-next版"
+        echo "3. 编译指定版本"
+        echo "------------------------"
+        echo "0. 返回主菜单"
+        echo "------------------------"
+        read -p "请输入你的选择: " sub_choice
+        case $sub_choice in
+          1)
+            clear
+            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
+            ;;
+          2)
+            clear
+            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
+            ;;
+          3)
+            clear
+            # 提示用户输入内容
+            echo "获取最新版本号中..."
+            REPO_URL="https://api.github.com/repos/SagerNet/sing-box/releases"
+            LATEST_TAG=$(curl -s $REPO_URL | jq -r '.[0].tag_name')
+            echo "获取成功"
+            sleep 1
+            clear
+            echo "------------------------"
+            echo "当前最新的版本为: $LATEST_TAG"
+            echo "输入例子 v1.4.0-rc.3 或 v1.4.0-beta.1 或 v1.3.6"
+            echo "------------------------"
+            read -p "请输入要编译的版本号： " user_input
+            clear
+            # 构建完整的命令
+            command="/usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+            # 打印最终的命令
+            echo "将要编译的版本是："
+            echo "------------------------"
+            echo "$user_input"
+            echo "------------------------"
+            # 确认是否执行命令
+            read -p "是否开始编译？(y/n) " execute
+            if [ "$execute" == "y" ]; then
+              # 执行命令
+            clear
+            eval "$command"
+            # 检查命令是否执行成功
+            if [ $? -eq 0 ]; then
+              echo "------------------------"
+              echo "指令运行完成，内核所在位置："
+              echo "/root/go/bin/sing-box"
+              echo "------------------------"
+            else
+              echo "------------------------"
+              echo "编译未完成，请检查输入的版本号是否正确，或者是否执行命令5安装go"
+              echo "------------------------"
+            fi
+            else
+              echo "已取消执行命令。"
+            fi
+            ;;
+          0)
+            break  # 跳出循环，退出菜单
+            ;;
+          *)
+            echo "无效的输入!"
+            ;;
+        esac
+          echo -e "\033[0;32m操作完成\033[0m"
+          echo "按任意键继续..."
+          read -n 1 -s -r -p ""
+          echo ""
+          clear
+        done
+        ;;
+      99)
+        while true; do
+        clear
+        echo "已知问题相关"
+        echo "------------------------"
+        echo "1. 如果SSH登录后显示-bash-x.x 选我"
+        echo "------------------------"
+        echo "0. 返回主菜单"
+        echo "------------------------"
+        read -p "请输入你的选择: " sub_choice
+        case $sub_choice in
+          1)
+            clear
+            cp /etc/skel/.bash_logout /root && cp /etc/skel/.bashrc /root && cp /etc/skel/.profile /root
+            echo "已修复，请断开SSH重新连接尝试"
+            ;;
+          0)
+            break  # 跳出循环，退出菜单
+            ;;
+          *)
+            echo "无效的输入!"
+            ;;
+        esac
+          echo -e "\033[0;32m操作完成\033[0m"
+          echo "按任意键继续..."
+          read -n 1 -s -r -p ""
+          echo ""
+          clear
+        done
         ;;
       0)
         break  # 跳出循环，退出菜单

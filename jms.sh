@@ -1670,8 +1670,8 @@ case $choice in
         clear
         sed -i '/alias jms=.*jms.sh/d' .bashrc
         read -p "请输入你的快捷按键: " jms
-        if ! grep -q "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh'" ~/.bashrc; then
-          echo "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh'" >> ~/.bashrc
+        if ! grep -q "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh'" ~/.bashrc; then
+          echo "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh && /root/jms.sh'" >> ~/.bashrc
           source  ~/.bashrc
         fi
         echo "------------------------"

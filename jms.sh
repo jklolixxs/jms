@@ -1668,8 +1668,10 @@ case $choice in
     case $sub_choice in
       1)
         clear
-        if ! grep -q "alias jms='/root/jms.sh'" ~/.bashrc; then
-          echo "alias jms='/root/jms.sh'" >> ~/.bashrc
+        sed -i '/alias jms=.*jms.sh/d' .bashrc
+        read -p "请输入你的快捷按键: " jms
+        if ! grep -q "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh'" ~/.bashrc; then
+          echo "alias $jms='wget -q -P /root -N --no-check-certificate "https://raw.githubusercontent.com/jklolixxs/jms/main/jms.sh" && chmod 700 /root/jms.sh'" >> ~/.bashrc
           source  ~/.bashrc
         fi
         echo "------------------------"
@@ -1697,7 +1699,8 @@ case $choice in
         ;;
       3)
         clear
-        sed -i '/alias jms=.*jms.sh/d' .bashrc
+        read -p "请输入你设置的快捷按键: " jms
+        sed -i "/alias $jms=.*jms.sh/d" .bashrc
         source ~/.bashrc
         rm -f /root/jms.sh
         echo "------------------------"

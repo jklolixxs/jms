@@ -14,8 +14,7 @@ echo 作者: jms
 echo 反馈:  https://github.com/jklolixxs/jms/issues
 echo =================================================
 echo "1. 系统信息查询"
-echo "2. 系统更新"
-echo "3. 系统清理"
+echo "2. 系统相关功能 ▶"
 echo "------------------------"
 echo "4. 常用工具安装 ▶"
 echo "5. Docker管理 ▶"
@@ -34,7 +33,7 @@ read -p "请输入你的选择: " choice
 case $choice in
   1)
     clear
-    # 函数：获取IPv4和IPv6地址
+    # 函数: 获取IPv4和IPv6地址
     fetch_ip_addresses() {
       ipv4_address=$(curl -s ipv4.ip.sb)
       ipv6_address=$(curl -s ipv6.ip.sb)
@@ -108,7 +107,21 @@ case $choice in
         }' /proc/net/dev)
 
 
-      current_time=$(date "+%Y-%m-%d %I:%M %p")
+    current_time=$(date "+%Y-%m-%d %I:%M %p")
+
+
+    swap_used=$(free -m | awk 'NR==3{print $3}')
+    swap_total=$(free -m | awk 'NR==3{print $2}')
+
+    if [ "$swap_total" -eq 0 ]; then
+        swap_percentage=0
+    else
+        swap_percentage=$((swap_used * 100 / swap_total))
+    fi
+
+    swap_info="${swap_used}MB/${swap_total}MB (${swap_percentage}%)"
+
+
 
     echo ""
     echo "系统信息查询"
@@ -124,7 +137,8 @@ case $choice in
     echo "CPU核心数: $cpu_cores"
     echo "------------------------"
     echo "CPU占用: $cpu_usage_percent"
-    echo "内存占用: $mem_info"
+    echo "物理内存: $mem_info"
+    echo "虚拟内存: $swap_info"
     echo "硬盘占用: $disk_info"
     echo "------------------------"
     echo "$output"
@@ -135,47 +149,299 @@ case $choice in
     echo "公网IPv6地址: $ipv6_address"
     echo "------------------------"
     echo "地理位置: $country $city"
-    echo "系统时间：$current_time"
+    echo "系统时间: $current_time"
     echo
+
     ;;
 
   2)
+    while true; do
     clear
+      echo " ▼ "
+      echo "系统相关功能"
+      echo "------------------------"
+      echo "1. 修改root用户密码"
+      echo "2. 修改SSH端口"
+      echo "3. 修改当前用户密码"
+      echo "4. 更改为root用户+密码登录模式"
+      echo "5. 禁用root用户并创建新拥有sudo权限用户"
+      echo "6. 增删改用户"
+      echo "------------------------"
+      echo "20. 系统更新"
+      echo "21. 系统清理"
+      echo "0. 返回主菜单"
+      echo "------------------------"
+      read -p "请输入你的选择: " sub_choice
 
-    # Update system on Debian-based systems
-    if [ -f "/etc/debian_version" ]; then
-        DEBIAN_FRONTEND=noninteractive apt update -y && DEBIAN_FRONTEND=noninteractive apt full-upgrade -y
-    fi
-
-    # Update system on Red Hat-based systems
-    if [ -f "/etc/redhat-release" ]; then
-        yum -y update
-    fi
-    ;;
-
-  3)
-    clear
-
-  if [ -f "/etc/debian_version" ]; then
-      # Debian-based systems
-      apt autoremove --purge -y
-      apt clean -y
-      apt autoclean -y
-      apt remove --purge $(dpkg -l | awk '/^rc/ {print $2}') -y
-      journalctl --rotate
-      journalctl --vacuum-time=1s
-      journalctl --vacuum-size=50M
-      apt remove --purge $(dpkg -l | awk '/^ii linux-(image|headers)-[^ ]+/{print $2}' | grep -v $(uname -r | sed 's/-.*//') | xargs) -y
-  elif [ -f "/etc/redhat-release" ]; then
-      # Red Hat-based systems
-      yum autoremove -y
-      yum clean all
-      journalctl --rotate
-      journalctl --vacuum-time=1s
-      journalctl --vacuum-size=50M
-      yum remove $(rpm -q kernel | grep -v $(uname -r)) -y
-  fi
-    ;;
+      case $sub_choice in
+        1)
+          clear
+          echo "密码隐性输入，不可见，但实际已经输入了"
+          echo "输入密码："
+          passwd root
+          service ssh restart
+          service sshd restart
+          ;;
+        2)
+          clear
+          # 提示用户输入内容
+          echo "输入例子 1024 或 12345"
+          read -p "请输入SSH的端口： " user_input
+		  
+          # 构建完整的命令
+          command="bash <(curl -fsSL git.io/key.sh) -o -p $user_input"
+		  
+          # 打印最终的命令
+          echo "将要更改的SSH登录端口是："
+          echo "$user_input"
+		  
+          # 确认是否执行命令
+          read -p "是否要执行更换SSH登录端口？(y/n) " execute
+          if [ "$execute" == "y" ]; then
+            # 执行命令
+            clear
+            eval "$command"
+            # 检查命令是否执行成功
+            if [ $? -eq 0 ]; then
+              echo "------------------------"
+              service ssh restart
+              echo "更换完成，当前SSH登录端口是："
+              echo "$user_input"
+              echo "密码更改完成！"
+              echo "如您开启了ufw等防火墙软件，请及时放行对应的端口，防止失联！"
+              echo "------------------------"
+            else
+              echo "------------------------"
+              echo "更换未完成，当前SSH登录端口未更换"
+              echo "------------------------"
+            fi
+          else
+            echo "已取消执行命令。"
+          fi
+          ;;
+        3)
+          clear
+          echo "密码隐性输入，不可见，但实际已经输入了"
+          echo "输入密码："
+          passwd
+          service ssh restart
+          service sshd restart
+          ;;
+        4)
+          clear
+          echo "设置你的root密码"
+          passwd root
+          sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config;
+          sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config;
+          service ssh restart
+          service sshd restart
+          echo "root用户登录开启成功"
+          echo "密码更改完成！"
+          echo "如您开启了ufw等防火墙软件，请及时放行对应的端口，防止失联！"
+          read -p "需要重启服务器吗？(Y/N): " choice
+        case "$choice" in
+          [Yy])
+            reboot
+            ;;
+          [Nn])
+            echo "已取消"
+            ;;
+          *)
+            echo "无效的选择，请输入 Y 或 N。"
+            ;;
+        esac
+            ;;
+        5)
+          clear
+          if ! command -v sudo &>/dev/null; then
+            if command -v apt &>/dev/null; then
+              apt update -y && apt install -y sudo
+            elif command -v yum &>/dev/null; then
+              yum -y update && yum -y install sudo
+            else
+              exit 1
+            fi
+          fi
+	    
+          # 提示用户输入新用户名
+          read -p "请输入新用户名: " new_username
+	    
+          # 创建新用户并设置密码
+          sudo useradd -m -s /bin/bash "$new_username"
+          sudo passwd "$new_username"
+	    
+          # 赋予新用户sudo权限
+          echo "$new_username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
+	    
+          # 禁用ROOT用户登录
+          sudo passwd -l root
+	    
+          echo "操作已完成。"
+          ;;
+        6)
+          while true; do
+          clear
+          # 显示所有用户、用户权限、用户组和是否在sudoers中
+          echo "用户列表"
+          echo "----------------------------------------------------------------------------"
+          printf "%-24s %-34s %-20s %-10s\n" "用户名" "用户权限" "用户组" "sudo权限"
+          while IFS=: read -r username _ userid groupid _ _ homedir shell; do
+            groups=$(groups "$username" | cut -d : -f 2)
+            sudo_status=$(sudo -n -lU "$username" 2>/dev/null | grep -q '(ALL : ALL)' && echo "Yes" || echo "No")
+            printf "%-20s %-30s %-20s %-10s\n" "$username" "$homedir" "$groups" "$sudo_status"
+          done < /etc/passwd
+            echo ""
+            echo "账户操作"
+            echo "------------------------"
+            echo "1. 创建普通账户             2. 创建高级账户"
+            echo "------------------------"
+            echo "3. 赋予最高权限             4. 取消最高权限"
+            echo "------------------------"
+            echo "5. 删除账号"
+            echo "------------------------"
+            echo "0. 返回上一级选单"
+            echo "------------------------"
+            read -p "请输入你的选择: " sub_choice
+            case $sub_choice in
+              1)
+                if ! command -v sudo &>/dev/null; then
+                  if command -v apt &>/dev/null; then
+                    apt update -y && apt install -y sudo
+                  elif command -v yum &>/dev/null; then
+                    yum -y update && yum -y install sudo
+                  else
+                    echo ""
+                  fi
+                fi
+                  # 提示用户输入新用户名
+                  read -p "请输入新用户名: " new_username
+                  # 创建新用户并设置密码
+                  sudo useradd -m -s /bin/bash "$new_username"
+                  sudo passwd "$new_username"
+                  echo "操作已完成。"
+                  ;;
+	    
+              2)
+                if ! command -v sudo &>/dev/null; then
+                  if command -v apt &>/dev/null; then
+                    apt update -y && apt install -y sudo
+                  elif command -v yum &>/dev/null; then
+                    yum -y update && yum -y install sudo
+                  else
+                    echo ""
+                  fi
+                fi
+                # 提示用户输入新用户名
+                read -p "请输入新用户名: " new_username
+                # 创建新用户并设置密码
+                sudo useradd -m -s /bin/bash "$new_username"
+                sudo passwd "$new_username"
+                # 赋予新用户sudo权限
+                echo "$new_username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
+                echo "操作已完成。"
+                ;;
+              3)
+                if ! command -v sudo &>/dev/null; then
+                   if command -v apt &>/dev/null; then
+                     apt update -y && apt install -y sudo
+                   elif command -v yum &>/dev/null; then
+                     yum -y update && yum -y install sudo
+                  else
+                     echo ""
+                  fi
+                fi
+                read -p "请输入用户名: " username
+                # 赋予新用户sudo权限
+                echo "$username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
+                ;;
+              4)
+                if ! command -v sudo &>/dev/null; then
+                  if command -v apt &>/dev/null; then
+                    apt update -y && apt install -y sudo
+                  elif command -v yum &>/dev/null; then
+                    yum -y update && yum -y install sudo
+                  else
+                    echo ""
+                  fi
+                fi
+                read -p "请输入用户名: " username
+                # 从sudoers文件中移除用户的sudo权限
+                sudo sed -i "/^$username\sALL=(ALL:ALL)\sALL/d" /etc/sudoers
+                ;;
+              5)
+                if ! command -v sudo &>/dev/null; then
+                  if command -v apt &>/dev/null; then
+                    apt update -y && apt install -y sudo
+                  elif command -v yum &>/dev/null; then
+                    yum -y update && yum -y install sudo
+                  else
+                    echo ""
+                  fi
+                fi
+                read -p "请输入要删除的用户名: " username
+                # 删除用户及其主目录
+                sudo userdel -r "$username"
+                ;;
+              0)
+                break  # 跳出循环，退出菜单
+                ;;
+              *)
+                break  # 跳出循环，退出菜单
+                ;;
+            esac
+          done
+          ;;
+        20)
+          clear
+          # Update system on Debian-based systems
+          if [ -f "/etc/debian_version" ]; then
+              DEBIAN_FRONTEND=noninteractive apt update -y && DEBIAN_FRONTEND=noninteractive apt full-upgrade -y
+          fi
+        
+          # Update system on Red Hat-based systems
+          if [ -f "/etc/redhat-release" ]; then
+              yum -y update
+          fi
+          ;;
+        21)
+          clear
+        
+          if [ -f "/etc/debian_version" ]; then
+            # Debian-based systems
+            apt autoremove --purge -y
+            apt clean -y
+            apt autoclean -y
+            apt remove --purge $(dpkg -l | awk '/^rc/ {print $2}') -y
+            journalctl --rotate
+            journalctl --vacuum-time=1s
+            journalctl --vacuum-size=50M
+            apt remove --purge $(dpkg -l | awk '/^ii linux-(image|headers)-[^ ]+/{print $2}' | grep -v $(uname -r | sed 's/-.*//') | xargs) -y
+          elif [ -f "/etc/redhat-release" ]; then
+            # Red Hat-based systems
+            yum autoremove -y
+            yum clean all
+            journalctl --rotate
+            journalctl --vacuum-time=1s
+            journalctl --vacuum-size=50M
+            yum remove $(rpm -q kernel | grep -v $(uname -r)) -y
+          fi
+          ;;
+        0)
+          /root/jms.sh
+          exit
+          ;;
+	    
+        *)
+          echo "无效的输入!"
+          ;;
+      esac
+      echo -e "\033[0;32m操作完成\033[0m"
+      echo "按任意键继续..."
+      read -n 1 -s -r -p ""
+      echo ""
+      clear
+  done
+  ;;
 
   4)
   while true; do

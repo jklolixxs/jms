@@ -21,7 +21,7 @@ echo "5. Docker管理 ▶"
 echo "6. aaPanel管理 ▶"
 echo "7. Sing-Box管理 ▶"
 echo "------------------------"
-echo "30. 一些常用脚本 ▶"
+echo "30. 测试脚本 ▶"
 echo "------------------------"
 echo "99. 脚本相关功能 ▶"
 echo "------------------------"
@@ -159,6 +159,7 @@ case $choice in
     echo "4. 更改为root用户+密码登录模式"
     echo "5. 禁用root用户并创建新拥有sudo权限用户"
     echo "6. 增删改用户 ▶"
+    echo -e "\e[31m7. ✳ 禁用密码改用密钥登录 ▶\e[0m"
     echo "------------------------"
     echo "20. 系统更新"
     echo "21. 系统清理"
@@ -379,6 +380,167 @@ case $choice in
             ;;
           *)
             echo "无效的输入!"
+            ;;
+        esac
+          echo -e "\033[0;32m操作完成\033[0m"
+          echo "按任意键继续..."
+          read -n 1 -s -r -p ""
+          echo ""
+          clear
+        done
+        ;;
+      7)
+        while true; do
+        # 显示警告消息
+        clear
+        echo "------------------------"
+        echo -e "\e[31m✳ 警告：这是一个重要的操作！✳\e[0m"
+        echo -e "\e[31m如果你并不知道如何使用密钥登录，请勿继续下一步！\e[0m"
+        echo "------------------------"
+        # 要求用户输入'y'或'n'
+        read -p "是否继续？(y/n): " choice
+        case "$choice" in
+          [Yy])
+            # 如果用户选择'y'，则提供三个选项供选择
+            clear
+            echo "------------------------"
+            echo "请选择一个选项："
+            echo "1. 从 GitHub 获取公钥"
+            echo "2. 从 本地 获取公钥"
+            echo "3. 从 URL 获取公钥"
+            echo "------------------------"
+            echo "0. 返回上一级"
+            echo "------------------------"
+            read -p "请选择: " option
+            case "$option" in
+              1)
+                while true; do
+                clear
+                # 获取用户输入
+                read -p "请输入GitHub用户名: " githubname
+                # 构建命令
+                command="bash <(curl -fsSL git.io/key.sh) -o -g $githubname -d"
+                # 显示命令并询问用户是否确认
+                clear
+                echo "------------------------"
+                echo "请确认GitHub用户名是否正确："
+                echo -e "\e[31m$githubname\e[0m"
+                echo "------------------------"
+                read -p "是否确认执行更换？(y/n): " choice
+                case "$choice" in
+                  [Yy])
+                    # 如果用户选择'y'，则执行命令
+                    eval "$command"
+                    clear
+                    echo "------------------------"
+                    echo -e "\e[31m密码登录已关闭，密钥登录已开启。\e[0m"
+                    echo "------------------------"
+                    break
+                    break
+                    ;;
+                  [Nn])
+                    # 如果用户选择'n'，则跳出循环
+                    break
+                    break
+                    ;;
+                  *)
+                    # 如果用户输入无效的选项，提醒用户重新输入
+                    echo "无效的选择，请输入'y'或'n'。"
+                    ;;
+                esac
+                done
+                ;;
+              2)
+                while true; do
+                clear
+                # 获取用户输入
+                read -p "请输入公钥所在路径: " localurl
+                # 构建命令
+                command="bash <(curl -fsSL git.io/key.sh) -o -f $localurl -d"
+                # 显示命令并询问用户是否确认
+                clear
+                echo "------------------------"
+                echo "请确认路径是否正确："
+                echo -e "\e[31m$localurl\e[0m"
+                echo "------------------------"
+                read -p "是否确认执行更换？(y/n): " choice
+                case "$choice" in
+                  [Yy])
+                    # 如果用户选择'y'，则执行命令
+                    eval "$command"
+                    clear
+                    echo "------------------------"
+                    echo -e "\e[31m密码登录已关闭，密钥登录已开启。\e[0m"
+                    echo "------------------------"
+                    break
+                    break
+                    ;;
+                  [Nn])
+                    # 如果用户选择'n'，则跳出循环
+                    break
+                    break
+                    ;;
+                  *)
+                    # 如果用户输入无效的选项，提醒用户重新输入
+                    echo "无效的选择，请输入'y'或'n'。"
+                    ;;
+                esac
+                done
+                ;;
+              3)
+                while true; do
+                clear
+                # 获取用户输入
+                read -p "请输入公钥所在网盘的URL: " url
+                # 构建命令
+                command="bash <(curl -fsSL git.io/key.sh) -o -u $url -d"
+                # 显示命令并询问用户是否确认
+                clear
+                echo "------------------------"
+                echo "请确认网盘的URL是否正确："
+                echo -e "\e[31m$url\e[0m"
+                echo "------------------------"
+                read -p "是否确认执行更换？(y/n): " choice
+                case "$choice" in
+                  [Yy])
+                    # 如果用户选择'y'，则执行命令
+                    eval "$command"
+                    clear
+                    echo "------------------------"
+                    echo -e "\e[31m密码登录已关闭，密钥登录已开启。\e[0m"
+                    echo "------------------------"
+                    break
+                    break
+                    ;;
+                  [Nn])
+                    # 如果用户选择'n'，则跳出循环
+                    break
+                    break
+                    ;;
+                  *)
+                    # 如果用户输入无效的选项，提醒用户重新输入
+                    echo "无效的选择，请输入'y'或'n'。"
+                    ;;
+                esac
+                done
+                ;;
+              0)
+                break
+                break
+                ;;
+              *)
+                clear
+                echo "无效的选项。"
+                ;;
+            esac
+            ;;
+          [Nn])
+            # 如果用户选择'n'，则退出循环
+            break
+            ;;
+          *)
+            # 如果用户输入无效的选项，提醒用户重新输入
+            echo "无效的选择，请输入'y'或'n'。"
             ;;
         esac
           echo -e "\033[0;32m操作完成\033[0m"
@@ -1361,6 +1523,7 @@ case $choice in
     echo "1. Yet-Another-Bench-Script 一键测试脚本 ▶"
     echo "2. 优化合集一键脚本"
     echo "3. LemonBench 一键测试脚本 ▶"
+    echo "4. 融合怪测评脚本"
     echo "------------------------"
     echo "11. VPS启动耗时"
     echo "12. 硬盘测试"
@@ -1607,6 +1770,10 @@ case $choice in
           echo ""
           clear
         done
+        ;;
+      4)
+        clear
+        bash <(wget -qO- bash.spiritlhl.net/ecs)
         ;;
       11)
         clear

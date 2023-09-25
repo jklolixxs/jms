@@ -593,9 +593,9 @@ case $choice in
         echo "------------------------"
         echo "1. 安装fail2ban         2. 卸载fail2ban"
         echo "------------------------"
-        echo "2. 启动fail2ban         3. 重启fail2ban"
-        echo "4. 关闭fail2ban         5. 设置开机自启"
-        echo "6. 查询fail2ban启动状态  7. 查询fail2ban日志"
+        echo "3. 启动fail2ban         4. 重启fail2ban"
+        echo "5. 关闭fail2ban         6. 设置开机自启"
+        echo "7. 查询fail2ban启动状态  8. 查询fail2ban日志"
         echo "------------------------"
         echo "10. 开启SSH防暴力破解规则"
         echo "11. 删除SSH防暴力破解规则"
@@ -650,6 +650,9 @@ case $choice in
           ;;
         7)
           clear
+          echo "------------------------"
+          echo "此状态可以按键盘 q 键退出"
+          echo "------------------------"
           systemctl status fail2ban
           ;;
         8)
@@ -662,8 +665,8 @@ case $choice in
           read -p "请输入规则的名称（例如：sshd-custom，不要带后缀）: " name
           read -p "请输入要监控的SSH端口号: " port
           read -p "请输入最大重试次数: " maxretry
-          read -p "请输入找回时间（单位：秒）: " findtime
-          read -p "请输入封禁时间（单位：秒）: " bantime
+          read -p "请输入限制重试次数的时间长度（单位：秒）: " findtime
+          read -p "请输入触发后封禁时长（单位：秒）: " bantime
           echo "------------------------"
 cat > /etc/fail2ban/jail.d/$name.local <<EOF
 [sshd-custom]
@@ -692,9 +695,17 @@ EOF
           read -p "请输入规则的名称（例如：sshd-custom，不要带后缀）: " name
           echo "------------------------"
 
-          if [ -e "$name" ]; then
-            rm -f "$name"
+          if [ -e "/etc/fail2ban/jail.d/$name.local" ]; then
+            rm -f "/etc/fail2ban/jail.d/$name.local"
             echo "已删除规则 $name"
+            read -p "是否要重启fail2ban以生效规则？(y/n): " choice
+
+            # 判断用户的选择
+            if [ "$choice" = "y" ] || [ "$choice" = "Y" ]; then
+              systemctl restart fail2ban
+            else
+              echo "取消操作."
+            fi
           else
             echo "名为 $name 的规则文件不存在"
           fi

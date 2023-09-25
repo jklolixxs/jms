@@ -1562,11 +1562,11 @@ EOF
         case $sub_choice in
           1)
             clear
-            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
+            /usr/local/go/bin/go install -v -trimpath -ldflags="-s -w -buildid= -X 'github.com/sagernet/sing-box/constant.Version=latest'" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
             ;;
           2)
             clear
-            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
+            /usr/local/go/bin/go install -v -trimpath -ldflags="-s -w -buildid= -X 'github.com/sagernet/sing-box/constant.Version=dev-next'" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
             ;;
           3)
             clear
@@ -1584,7 +1584,9 @@ EOF
             read -p "请输入要编译的版本号： " user_input
             clear
             # 构建完整的命令
-            command="/usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+            command="/usr/local/go/bin/go install -v -trimpath -ldflags=\"-s -w -buildid= -X 'github.com/sagernet/sing-box/constant.Version=$user_input'\" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+
+
             # 打印最终的命令
             echo "将要编译的版本是："
             echo "------------------------"

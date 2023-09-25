@@ -164,6 +164,8 @@ case $choice in
     echo "20. 系统更新"
     echo "21. 系统清理"
     echo "------------------------"
+    echo "50. fail2ban ▶"
+    echo "------------------------"
     echo "0. 返回上一级"
     echo "------------------------"
     read -p "请输入你的选择: " sub_choice
@@ -584,6 +586,135 @@ case $choice in
           yum remove $(rpm -q kernel | grep -v $(uname -r)) -y
         fi
         ;;
+      50)
+        while true; do
+        clear
+        echo "fail2ban"
+        echo "------------------------"
+        echo "1. 安装fail2ban         2. 卸载fail2ban"
+        echo "------------------------"
+        echo "2. 启动fail2ban         3. 重启fail2ban"
+        echo "4. 关闭fail2ban         5. 设置开机自启"
+        echo "6. 查询fail2ban启动状态  7. 查询fail2ban日志"
+        echo "------------------------"
+        echo "10. 开启SSH防暴力破解规则"
+        echo "11. 删除SSH防暴力破解规则"
+        echo "------------------------"
+        echo "0. 返回上一级"
+        echo "------------------------"
+        read -p "请输入你的选择: " sub_choice
+        case $sub_choice in
+        1)
+          clear
+          if command -v apt &>/dev/null; then
+            apt update -y && apt install -y fail2ban
+            echo "安装完成"
+          elif command -v yum &>/dev/null; then
+            yum -y update && yum -y install fail2ban
+            echo "安装完成"
+          else
+            echo "未知的包管理器!"
+          fi
+          ;;
+        2)
+          clear
+          if command -v apt &>/dev/null; then
+            apt update -y && apt remove -y fail2ban
+            echo "卸载完成"
+          elif command -v yum &>/dev/null; then
+            yum -y update && yum -y remove fail2ban
+            echo "卸载完成"
+          else
+            echo "未知的包管理器!"
+          fi
+          ;;
+        3)
+          clear
+          systemctl start fail2ban
+          echo "已启动"
+          ;;
+        4)
+          clear
+          systemctl restart fail2ban
+          echo "已重启"
+          ;;
+        5)
+          clear
+          systemctl stop fail2ban
+          echo "已停止"
+          ;;
+        6)
+          clear
+          systemctl enable fail2ban
+          echo "已设置开机自启"
+          ;;
+        7)
+          clear
+          systemctl status fail2ban
+          ;;
+        8)
+          clear
+          journalctl -u fail2ban --output cat -f
+          ;;
+        10)
+          clear
+          echo "------------------------"
+          read -p "请输入规则的名称（例如：sshd-custom，不要带后缀）: " name
+          read -p "请输入要监控的SSH端口号: " port
+          read -p "请输入最大重试次数: " maxretry
+          read -p "请输入找回时间（单位：秒）: " findtime
+          read -p "请输入封禁时间（单位：秒）: " bantime
+          echo "------------------------"
+cat > /etc/fail2ban/jail.d/$name.local <<EOF
+[sshd-custom]
+enabled = true
+port = $port
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = $maxretry
+findtime = $findtime
+bantime = $bantime
+EOF
+          clear
+          echo "名为 $name 的规则已创建"
+          read -p "是否要重启fail2ban以生效规则？(y/n): " choice
+
+          # 判断用户的选择
+          if [ "$choice" = "y" ] || [ "$choice" = "Y" ]; then
+            systemctl restart fail2ban
+          else
+            echo "取消操作."
+          fi
+          ;;
+        11)
+          clear
+          echo "------------------------"
+          read -p "请输入规则的名称（例如：sshd-custom，不要带后缀）: " name
+          echo "------------------------"
+
+          if [ -e "$name" ]; then
+            rm -f "$name"
+            echo "已删除规则 $name"
+          else
+            echo "名为 $name 的规则文件不存在"
+          fi
+          ;;
+
+        0)
+          break  # 跳出循环，退出菜单
+          ;;
+        *)
+          echo "无效的输入!"
+          ;;
+      esac
+        echo -e "\033[0;32m操作完成\033[0m"
+        echo "按任意键继续..."
+        read -n 1 -s -r -p ""
+        echo ""
+        clear
+      done
+      ;;
+
       0)
         break  # 跳出循环，退出菜单
         ;;
@@ -620,6 +751,7 @@ case $choice in
     echo "15. tar GZ压缩解压工具"
     echo "16. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
     echo "17. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
+    echo "18. fail2ban 检测系统上的恶意登录尝试和破解尝试，然后自动采取措施来保护系统"
     echo "------------------------"
     echo "31. 全部安装"
     echo "32. 全部卸载"
@@ -794,12 +926,22 @@ case $choice in
           echo "未知的包管理器!"
         fi
         ;;
+      17)
+        clear
+        if command -v apt &>/dev/null; then
+          apt update -y && apt install -y fail2ban
+        elif command -v yum &>/dev/null; then
+          yum -y update && yum -y install fail2ban
+        else
+          echo "未知的包管理器!"
+        fi
+        ;;
       31)
         clear
         if command -v apt &>/dev/null; then
-          apt update -y && apt install -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
+          apt update -y && apt install -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq fail2ban
         elif command -v yum &>/dev/null; then
-          yum -y update && yum -y install curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
+          yum -y update && yum -y install curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq fail2ban
         else
           echo "未知的包管理器!"
         fi
@@ -807,9 +949,9 @@ case $choice in
       32)
         clear
         if command -v apt &>/dev/null; then
-          apt update -y && apt remove -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq
+          apt update -y && apt remove -y curl wget git sudo ufw screen socat dnsutils cpulimit htop chrony iftop unzip tar screenfetch jq fail2ban
         elif command -v yum &>/dev/null; then
-          yum -y update && yum -y remove curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq
+          yum -y update && yum -y remove curl wget git sudo ufw screen socat bind-utils cpulimit htop chrony iftop unzip tar screenfetch jq fail2ban
         else
           echo "未知的包管理器!"
         fi
@@ -1409,11 +1551,11 @@ case $choice in
         case $sub_choice in
           1)
             clear
-            /usr/local/go/bin/go install -v -trimpath -ldflags="-s -w -buildid= -X 'github.com/sagernet/sing-box/constant.Version=latest'" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
+            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@latest
             ;;
           2)
             clear
-            /usr/local/go/bin/go install -v -trimpath -ldflags="-s -w -buildid= -X 'github.com/sagernet/sing-box/constant.Version=dev-next'" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
+            /usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@dev-next
             ;;
           3)
             clear
@@ -1431,7 +1573,7 @@ case $choice in
             read -p "请输入要编译的版本号： " user_input
             clear
             # 构建完整的命令
-            command="/usr/local/go/bin/go install -v -trimpath -ldflags='-s -w -buildid= -X \"github.com/sagernet/sing-box/constant.Version=$user_input\"' -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_ech,with_utls,with_reality_server,with_acme,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
+            command="/usr/local/go/bin/go install -v -trimpath -ldflags "-s -w -buildid=" -tags with_quic,with_grpc,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_reality_server,with_acme,with_clash_api,with_v2ray_api,with_gvisor github.com/sagernet/sing-box/cmd/sing-box@$user_input"
             # 打印最终的命令
             echo "将要编译的版本是："
             echo "------------------------"

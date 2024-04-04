@@ -1684,6 +1684,7 @@ EOF
     echo "12. 硬盘测试"
     echo "------------------------"
     echo "21. 流媒体检测"
+    echo "22. 流媒体检测（附IP检测）"
     echo "------------------------"
     echo "31. 三网回程测试TCP"
     echo "32. 三网回程测试ICMP"
@@ -1944,6 +1945,11 @@ EOF
         clear
         echo "请稍等，启动脚本前需下载一些必备软件"
         bash <(curl -L -s check.unlock.media)
+        ;;
+      22)
+        clear
+        echo "请稍等，启动脚本前需下载一些必备软件"
+        bash <(curl -L -s media.ispvps.com)
         ;;
       31)
         clear

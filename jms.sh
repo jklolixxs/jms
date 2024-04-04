@@ -756,16 +756,17 @@ EOF
     echo "9. bind-utils DNS相关工具 (仅限Centos安装)"
     echo "10. cpulimit 限制CPU使用率"
     echo "11. htop 系统监控工具"
-    echo "12. chrony NTP时间同步工具"
-    echo "13. iftop 网络流量监控工具"
-    echo "14. unzip ZIP压缩解压工具z"
-    echo "15. tar GZ压缩解压工具"
-    echo "16. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
-    echo "17. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
-    echo "18. fail2ban 检测系统上的恶意登录尝试和破解尝试，然后自动采取措施来保护系统"
+    echo "12. btop 超酷炫系统监控工具（仅在Debian12源中内置）"
+    echo "13. chrony NTP时间同步工具"
+    echo "14. iftop 网络流量监控工具"
+    echo "15. unzip ZIP压缩解压工具z"
+    echo "16. tar GZ压缩解压工具"
+    echo "17. screenfetch 通过有趣的图形和标志展现有关您的系统和发行版的信息"
+    echo "18. jq 用于处理JSON数据 (如果后面使用一键脚本，可能需要用到此工具)"
+    echo "19. fail2ban 检测系统上的恶意登录尝试和破解尝试，然后自动采取措施来保护系统"
     echo "------------------------"
-    echo "31. 全部安装"
-    echo "32. 全部卸载"
+    echo "31. 全部安装（不包含第12项）"
+    echo "32. 全部卸载（不包含第12项）"
     echo "------------------------"
     echo "0. 返回上一级"
     echo "------------------------"
@@ -880,6 +881,16 @@ EOF
       12)
         clear
         if command -v apt &>/dev/null; then
+          apt update -y && apt install -y btop
+        elif command -v yum &>/dev/null; then
+          yum -y update && yum -y install btop
+        else
+          echo "未知的包管理器!"
+        fi
+        ;;
+      13)
+        clear
+        if command -v apt &>/dev/null; then
           apt update -y && apt install -y chrony
         elif command -v yum &>/dev/null; then
           yum -y update && yum -y install chrony
@@ -887,7 +898,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      13)
+      14)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y iftop
@@ -897,7 +908,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      14)
+      15)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y unzip
@@ -907,7 +918,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      15)
+      16)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y tar
@@ -917,7 +928,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      16)
+      17)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y screenfetch
@@ -927,7 +938,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      17)
+      18)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y jq
@@ -937,7 +948,7 @@ EOF
           echo "未知的包管理器!"
         fi
         ;;
-      17)
+      19)
         clear
         if command -v apt &>/dev/null; then
           apt update -y && apt install -y fail2ban

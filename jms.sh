@@ -2,7 +2,7 @@
 
 # 检查当前用户是否为 root 用户
 if [ "$EUID" -ne 0 ]; then
-  echo "请使用 root 用户身份运行此脚本"
+  echo "请使用 root 用户身份运行"
   exit
 fi
 
@@ -1696,6 +1696,7 @@ EOF
     echo "------------------------"
     echo "21. 流媒体检测"
     echo "22. 流媒体检测（附IP检测）"
+    echo "23. 流媒体检测（附AI网站检测）"
     echo "------------------------"
     echo "31. 三网回程测试TCP"
     echo "32. 三网回程测试ICMP"
@@ -1961,6 +1962,11 @@ EOF
         clear
         echo "请稍等，启动脚本前需下载一些必备软件"
         bash <(curl -L -s media.ispvps.com)
+        ;;
+      23)
+        clear
+        echo "请稍等，启动脚本前需下载一些必备软件"
+        bash <(curl -L -s https://netflix.dad/detect-script)
         ;;
       31)
         clear

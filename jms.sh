@@ -1966,7 +1966,7 @@ EOF
       23)
         clear
         echo "请稍等，启动脚本前需下载一些必备软件"
-        bash <(curl -L -s https://netflix.dad/detect-script)
+        bash <(curl -L -s https://raw.githubusercontent.com/1-stream/RegionRestrictionCheck/main/check.sh)
         ;;
       31)
         clear
